@@ -13,10 +13,7 @@
         android:theme="@style/Theme.JAIDAR"
         tools:targetApi="31">
         <activity
-            android:name=".JobListingDetails"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
+            android:name=".JobListingDetailsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,6 +27,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"></activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
