@@ -13,8 +13,9 @@
         android:theme="@style/Theme.JAIDAR"
         tools:targetApi="31">
         <activity
-            android:name=".FAQAdapter"
-            android:exported="false" />
+            android:name=".FAQAnswer"
+            android:exported="false"
+            ></activity>
         <activity
             android:name=".UserProfileActivity"
             android:exported="false" />
