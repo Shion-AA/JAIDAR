@@ -29,7 +29,7 @@
             android:name=".JobListingDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".LandingPageActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +42,7 @@
             android:exported="false"
             ></activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".LandingPageActivity"
             android:exported="false" />
         <activity
             android:name=".FAQ"
