@@ -1,24 +1,48 @@
 package ph.edu.usc.jaidar;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
+    FirebaseAuth mAuth;
+    TextView greets;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        String testEmail = "23102463@usc.edu.ph";
+        String testPassword = "test1234";
+        greets = findViewById(R.id.greet);
+        mAuth.createUserWithEmailAndPassword(testEmail, testPassword)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        greets.setText("Successfully inserted");
+                        Toast.makeText(this, "User created successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Exception e = task.getException();
+                        if (e != null) {
+                            String message = e.getMessage();
+                            if (message != null && message.contains("email address is already in use")) {
+                                greets.setText("Email already registered");
+                                Toast.makeText(this, "Email already registered.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                greets.setText("Error: " + message + "");
+                                Toast.makeText(this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+
+
     }
 }
