@@ -14,6 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class SignupActivity extends AppCompatActivity {
 
     EditText nameInput, emailInput, passwordInput, confirmPasswordInput;
@@ -89,5 +91,33 @@ public class SignupActivity extends AppCompatActivity {
         //Code to detect valid Email format. code later.
         return true;
     }
+
+
+//    TO MYK: I moved those lines of code from MainActivity to here cuz I had to code stuff on MainActivity
+//    FirebaseAuth mAuth;
+//    TextView greets;
+//    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//    String testEmail = "23102463@usc.edu.ph";
+//    String testPassword = "test1234";
+//    greets = findViewById(R.id.greet);
+//        mAuth.createUserWithEmailAndPassword(testEmail, testPassword)
+//            .addOnCompleteListener(task -> {
+//        if (task.isSuccessful()) {
+//            greets.setText("Successfully inserted");
+//            Toast.makeText(this, "User created successfully!", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Exception e = task.getException();
+//            if (e != null) {
+//                String message = e.getMessage();
+//                if (message != null && message.contains("email address is already in use")) {
+//                    greets.setText("Email already registered");
+//                    Toast.makeText(this, "Email already registered.", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    greets.setText("Error: " + message + "");
+//                    Toast.makeText(this, "Error: " + message, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }
+//    });
 
 }

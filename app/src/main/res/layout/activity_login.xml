@@ -75,12 +75,18 @@
             android:layout_marginTop="4dp"
             android:layout_gravity="end" />
 
+        <CheckBox
+            android:id="@+id/remember_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remember Me"
+            android:checked="true"
+            android:layout_gravity="start" />
         <Button
             android:id="@+id/loginBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log In"
-            android:layout_marginTop="20dp" />
+            android:text="Log In" />
 
         <LinearLayout
             android:id="@+id/signupRow"
