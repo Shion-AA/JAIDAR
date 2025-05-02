@@ -8,13 +8,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -22,64 +23,85 @@ public class SignupActivity extends AppCompatActivity {
     TextView loginLink;
     Button signupBtn;
 
+    FirebaseAuth mAuth;
+    FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        nameInput = (EditText) findViewById(R.id.nameInput);
-        emailInput = (EditText) findViewById(R.id.emailInput);
-        passwordInput = (EditText) findViewById(R.id.passwordInput);
-        confirmPasswordInput = (EditText) findViewById(R.id.confirmPasswordInput);
+        nameInput = findViewById(R.id.nameInput);
+        emailInput = findViewById(R.id.emailInput);
+        passwordInput = findViewById(R.id.passwordInput);
+        confirmPasswordInput = findViewById(R.id.confirmPasswordInput);
+        loginLink = findViewById(R.id.alreadyAccount);
+        signupBtn = findViewById(R.id.signupBtn);
 
-        loginLink = (TextView) findViewById(R.id.alreadyAccount);
-        loginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-            }
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        loginLink.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
         });
 
-        signupBtn = (Button) findViewById(R.id.signupBtn);
-        signupBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signupAttempt();
-            }
-        });
+        signupBtn.setOnClickListener(v -> signupAttempt());
     }
 
-    public void signupAttempt(){
+    public void signupAttempt() {
         String name = nameInput.getText().toString();
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
         String confirmation = confirmPasswordInput.getText().toString();
 
-        if(validateInput(name, email, password, confirmation)){
-            //Save input data in database, and automatically login. Nothing for now.
-            Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
-            startActivity(intent);
+        if (validateInput(name, email, password, confirmation)) {
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                String uid = user.getUid();
+
+                                // Add additional fields to Firestore
+                                Map<String, Object> userMap = new HashMap<>();
+                                userMap.put("name", name);
+                                userMap.put("email", email);
+
+                                db.collection("users").document(uid).set(userMap)
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(SignupActivity.this, HomePageActivity.class));
+                                            finish();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(this, "Error saving user info: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        });
+                            }
+                        } else {
+                            Toast.makeText(this, "Sign up failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
 
-    public boolean validateInput(String name, String email, String password, String confirmation){
-        if(name.isEmpty()){
+    public boolean validateInput(String name, String email, String password, String confirmation) {
+        if (name.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Missing Name input field.", Toast.LENGTH_SHORT).show();
             return false;
-        } else if(email.isEmpty()){
+        } else if (email.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Missing email input field.", Toast.LENGTH_SHORT).show();
             return false;
-        } else if(!isEmail(email)){
+        } else if (!isEmail(email)) {
             Toast.makeText(getApplicationContext(), "Invalid Email Address.", Toast.LENGTH_SHORT).show();
             return false;
-        } else if(password.isEmpty()){
+        } else if (password.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Missing password input field.", Toast.LENGTH_SHORT).show();
             return false;
-        } else if(confirmation.isEmpty()){
+        } else if (confirmation.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Missing confirmation input field.", Toast.LENGTH_SHORT).show();
             return false;
-        } else if(!password.equals(confirmation)){
+        } else if (!password.equals(confirmation)) {
             Toast.makeText(getApplicationContext(), "Password confirmation does not match.", Toast.LENGTH_SHORT).show();
             return false;
         } else {
@@ -87,37 +109,7 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
-    public boolean isEmail(String email){
-        //Code to detect valid Email format. code later.
-        return true;
+    public boolean isEmail(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
-
-
-//    TO MYK: I moved those lines of code from MainActivity to here cuz I had to code stuff on MainActivity
-//    FirebaseAuth mAuth;
-//    TextView greets;
-//    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//    String testEmail = "23102463@usc.edu.ph";
-//    String testPassword = "test1234";
-//    greets = findViewById(R.id.greet);
-//        mAuth.createUserWithEmailAndPassword(testEmail, testPassword)
-//            .addOnCompleteListener(task -> {
-//        if (task.isSuccessful()) {
-//            greets.setText("Successfully inserted");
-//            Toast.makeText(this, "User created successfully!", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Exception e = task.getException();
-//            if (e != null) {
-//                String message = e.getMessage();
-//                if (message != null && message.contains("email address is already in use")) {
-//                    greets.setText("Email already registered");
-//                    Toast.makeText(this, "Email already registered.", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    greets.setText("Error: " + message + "");
-//                    Toast.makeText(this, "Error: " + message, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        }
-//    });
-
 }
