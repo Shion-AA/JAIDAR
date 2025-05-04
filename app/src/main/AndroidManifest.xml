@@ -33,16 +33,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomePageActivity"
+            android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".SignupActivity"
+            android:name=".HomePageActivity"
             android:exported="false" />
         <activity
             android:name=".JobListingDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".SignupActivity"
             android:exported="false">
         </activity>
         <activity
