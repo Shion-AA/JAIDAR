@@ -22,16 +22,16 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".HomePageActivity"
+            android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".SignupActivity"
+            android:name=".HomePageActivity"
             android:exported="false" />
         <activity
             android:name=".JobListingDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".SignupActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
