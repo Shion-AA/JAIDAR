@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class HomePageActivity extends AppCompatActivity {
 
@@ -23,7 +25,22 @@ public class HomePageActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        String uid = mAuth.getCurrentUser().getUid();
+        TextView nameTextView = findViewById(R.id.name);
+        db.collection("users").document(uid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String name = documentSnapshot.getString("name");
+                        nameTextView.setText(name != null ? name : "User");
+                    } else {
+                        nameTextView.setText("User");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    nameTextView.setText("User"); // fallback
+                });
         // Logout Button
         logoutBtn = findViewById(R.id.logout_button);
         logoutBtn.setOnClickListener(v -> {
