@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <ImageView
+            <ImageView android:id="@+id/back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/back_btn"
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <TextView android:id="@+id/user_whole_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Test S. User"
@@ -73,7 +73,7 @@
                 android:textStyle="bold"
                 />
 
-            <TextView
+            <TextView android:id="@+id/user_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="\@JohnDoe123"

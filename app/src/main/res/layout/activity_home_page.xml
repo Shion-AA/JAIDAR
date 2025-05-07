@@ -109,6 +109,18 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             android:text="Logout" />
+        <Button
+            android:id="@+id/TEMP_EDITOR"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:text="EDITOR" />
+        <Button
+            android:id="@+id/TEMP_VIEW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:text="VIEW" />
     </LinearLayout>
 
 

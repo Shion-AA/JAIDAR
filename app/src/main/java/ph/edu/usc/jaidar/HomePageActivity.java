@@ -17,6 +17,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     Button logoutBtn;
+    Button TEMPEDITOR, TEMPVIEW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,18 @@ public class HomePageActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+        //TEMPORARY BUTTON FOR INTENT. DELETE LATER
+        TEMPEDITOR = findViewById(R.id.TEMP_EDITOR);
+        TEMPEDITOR.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), RecruitmentEditorActivity.class);
+            startActivity(intent);
+        });
+        TEMPVIEW = findViewById(R.id.TEMP_VIEW);
+        TEMPVIEW.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), RecruitmentViewActivity.class);
+            startActivity(intent);
+        });
+        //END TEMPORARY INTENT
 
         // Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
