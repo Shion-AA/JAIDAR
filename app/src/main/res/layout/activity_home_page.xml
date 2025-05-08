@@ -7,105 +7,404 @@
     android:layout_height="match_parent"
     tools:context=".HomePageActivity">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/logo_with_bg"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <LinearLayout
-        android:id="@+id/formContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:orientation="vertical"
-        android:padding="30dp"
-        app:layout_constraintTop_toBottomOf="@id/logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+<<<<<<< Updated upstream
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Good day, User" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TEMPORARY HOMEPAGE!!" />
+=======
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/txtSearch"
-                android:layout_width="298dp"
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/logo_with_bg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/round_searchbar"
-                android:hint="⌕ Search"
-                android:padding="10dp"
-                android:scaleType="centerCrop"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:layout_gravity="center"
+                android:text="J.A.I.D.A.R"
+                android:textColor="#4b0082"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Job Acquisition and Interships Radar"
+                android:textColor="#4b0082"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!--            <EditText-->
+                <!--                android:id="@+id/txtSearch"-->
+                <!--                android:layout_width="298dp"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_weight="1"-->
+                <!--                android:background="@drawable/round_searchbar"-->
+                <!--                android:hint="⌕ Search"-->
+                <!--                android:padding="10dp"-->
+                <!--                android:scaleType="centerCrop"-->
+                <!--                android:textColor="#FFFFFF"-->
+                <!--                android:textColorHint="#FFFFFF" />-->
+
+                <!--            <Button-->
+                <!--                android:id="@+id/btnSearch"-->
+                <!--                android:layout_width="70dp"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:text="⌕"-->
+                <!--                android:textSize="25dp" />-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnWorker"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button"
+                    android:clipToOutline="true"
+                    android:drawableStart="@drawable/looking_to_work_icon"
+                    android:padding="10dp"
+                    android:text="Looking to Work"
+                    android:textColor="#ffffff"
+                    android:visibility="visible" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnHiring"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button"
+                    android:clipToOutline="true"
+                    android:padding="10dp"
+                    android:text="Looking to Hire"
+                    android:drawableEnd="@drawable/looking_to_hire_icon"
+                    android:textColor="#ffffff"
+                    android:visibility="visible" />
+            </LinearLayout>
+>>>>>>> Stashed changes
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_margin="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Select Category"
+                    android:textColor="#5742BF"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryElectrician"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:text="Electrician"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryPlumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:text="Plumber"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryCarpenter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:text="Carpenter"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryWelding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:text="Welding"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryRoofer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:text="Roofer"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryMechanic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:padding="10dp"
+                        android:text="Mechanic"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryCaretaker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:padding="10dp"
+                        android:text="Caretaker"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryIronworker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:padding="10dp"
+                        android:text="Ironworker"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategorySanitation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:padding="10dp"
+                        android:text="Sanitation"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryDrywallInstaller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:padding="10dp"
+                        android:text="Drywall Installer"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryMason"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:padding="10dp"
+                        android:text="Mason"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryBricklayer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:padding="10dp"
+                        android:text="Bricklayer"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryTileSetter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:text="Tile Setter"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryExterminator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:padding="10dp"
+                        android:text="Exterminator"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCategoryPainter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/button_gradient"
+                        android:backgroundTint="@null"
+                        android:text="Painter"
+                        android:textAllCaps="false"
+                        android:textColor="#5742BF"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <Button
-                android:id="@+id/btnSearch"
-                android:layout_width="70dp"
+                android:id="@+id/logout_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="⌕"
-                android:textSize="25dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
-
-            <Button
-                android:id="@+id/btnHiring"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:clipToOutline="true"
-                android:text="Looking to Hire"
-                android:scaleType="centerCrop"
+                android:text="Logout"
                 android:visibility="visible" />
 
             <Button
-                android:id="@+id/btnWorker"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:clipToOutline="true"
-                android:text="Looking to Work"
-                android:scaleType="centerCrop"
+                android:id="@+id/TEMP_EDITOR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="EDITOR"
                 android:visibility="visible" />
+
+            <Button
+                android:id="@+id/TEMP_VIEW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="VIEW"
+                android:visibility="visible" />
+
+
         </LinearLayout>
 
+<<<<<<< Updated upstream
         <Button
             android:id="@+id/logout_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
             android:text="Logout" />
+=======
+>>>>>>> Stashed changes
     </LinearLayout>
 
-
+    <ImageView
+        android:id="@+id/waveBg"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bottom_wave"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
