@@ -8,11 +8,11 @@
     tools:context=".RecruitmentEditorActivity"
     >
 
-    <LinearLayout
-        android:id="@+id/header"
+    <LinearLayout android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" >
 
@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <ImageView
+            <ImageView android:id="@+id/back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/back_btn"
@@ -43,8 +43,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/user_profile"
+    <LinearLayout android:id="@+id/user_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -64,7 +63,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <TextView android:id="@+id/user_whole_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Test S. User"
@@ -74,7 +73,7 @@
                 android:textStyle="bold"
                 />
 
-            <TextView
+            <TextView android:id="@+id/user_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="\@JohnDoe123"
@@ -87,8 +86,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/title_section"
+    <LinearLayout android:id="@+id/title_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -105,21 +103,64 @@
             android:layout_marginBottom="5dp"
             />
 
-        <TextView
+        <EditText android:id="@+id/title_input"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:hint="Job offer headline "
+            android:inputType="textMultiLine"
+            android:lines="1"
+            android:maxLines="2"
             android:background="@drawable/bg_border" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/desc_section"
+    <LinearLayout android:id="@+id/rate_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/title_section" >
+        app:layout_constraintTop_toBottomOf="@id/title_section">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rate"
+            android:textStyle="bold"
+            android:textAlignment="textStart"
+            android:textColor="#888888" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/rate_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="How much?"
+                android:inputType="number"
+                android:maxLines="1"
+                android:background="@drawable/bg_border" />
+
+            <CheckBox android:id="@+id/rate_flex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:text="Flex"
+                android:checked="false"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/desc_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@id/rate_section" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -131,34 +172,187 @@
             android:layout_marginBottom="5dp"
             />
 
-        <TextView
-            android:layout_height="match_parent"
+        <EditText android:id="@+id/description_input"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:minHeight="200dp"
             android:hint="Job description details"
+            android:inputType="textMultiLine"
+            android:gravity="start"
+            android:lines="8"
             android:background="@drawable/bg_border" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/tag_section"
+<!--    <LinearLayout-->
+<!--        android:id="@+id/tag_section"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_margin="10dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/desc_section">-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/tag_list"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:background="@drawable/bg_rounded_card"-->
+<!--            >-->
+<!--            -->
+<!--            -->
+
+<!--        </LinearLayout>-->
+
+<!--    </LinearLayout> -->
+
+    <LinearLayout android:id="@+id/headcount_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/desc_section">
+        app:layout_constraintTop_toBottomOf="@id/desc_section" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Target Headcount"
+            android:textStyle="bold"
+            android:textAlignment="textStart"
+            android:textColor="#888888" />
 
         <LinearLayout
-            android:id="@+id/tag_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/bg_rounded_card"
-            >
+            android:orientation="horizontal" >
+
+            <RadioGroup android:id="@+id/headcount_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_marginLeft="8dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/user_one"
+                    />
+                <RadioButton
+                    android:id="@+id/headcount_option1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"/>
+
+                <Space
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/user_two"
+                    />
+                <RadioButton
+                    android:id="@+id/headcount_option2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2"/>
+
+                <Space
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/user_multiple"
+                    />
+                <RadioButton
+                    android:id="@+id/headcount_option3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="0dp"
+                    />
+
+                <EditText android:id="@+id/headcount_custom_input"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="-16dp"
+                    android:inputType="numberDecimal"
+                    android:lineBreakStyle="none"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:background="@drawable/bg_border"
+                    android:enabled="false"
+                    android:focusable="false"
+                    />
+
+            </RadioGroup>
 
         </LinearLayout>
 
     </LinearLayout>
 
+    <LinearLayout android:id="@+id/upload_option_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@id/headcount_section">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Options"
+            android:textStyle="bold"
+            android:textAlignment="textStart"
+            android:textColor="#888888" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/headcount_section" >
+
+            <RadioGroup android:id="@+id/upload_option_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_option1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="12dp"
+                    android:text="Private" />
+
+                <RadioButton
+                    android:id="@+id/radio_option2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Public" />
+
+            </RadioGroup>
+
+            <Button android:id="@+id/post_button"
+                android:layout_width="96dp"
+                android:layout_height="48dp"
+                android:backgroundTint="#AA00FF"
+                android:text="POST"
+                android:textSize="16dp"
+                android:padding="0dp"
+                android:layout_gravity="right"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

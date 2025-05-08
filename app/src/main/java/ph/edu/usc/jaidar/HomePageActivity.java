@@ -5,16 +5,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class HomePageActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     Button logoutBtn;
+    Button TEMPEDITOR, TEMPVIEW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +26,8 @@ public class HomePageActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-<<<<<<< Updated upstream
-=======
 //        String uid = mAuth.getCurrentUser().getUid();
 //        TextView nameTextView = findViewById(R.id.name);
 //        db.collection("users").document(uid).get()
@@ -40,7 +42,21 @@ public class HomePageActivity extends AppCompatActivity {
 //                .addOnFailureListener(e -> {
 //                    nameTextView.setText("User"); // fallback
 //                });
->>>>>>> Stashed changes
+        String uid = mAuth.getCurrentUser().getUid();
+        TextView nameTextView = findViewById(R.id.name);
+        db.collection("users").document(uid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String name = documentSnapshot.getString("name");
+                        nameTextView.setText(name != null ? name : "User");
+                    } else {
+                        nameTextView.setText("User");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    nameTextView.setText("User"); // fallback
+                });
+
         // Logout Button
         logoutBtn = findViewById(R.id.logout_button);
         logoutBtn.setOnClickListener(v -> {
@@ -54,6 +70,18 @@ public class HomePageActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+        //TEMPORARY BUTTON FOR INTENT. DELETE LATER
+        TEMPEDITOR = findViewById(R.id.TEMP_EDITOR);
+        TEMPEDITOR.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), RecruitmentEditorActivity.class);
+            startActivity(intent);
+        });
+        TEMPVIEW = findViewById(R.id.TEMP_VIEW);
+        TEMPVIEW.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), RecruitmentViewActivity.class);
+            startActivity(intent);
+        });
+        //END TEMPORARY INTENT
 
         // Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);

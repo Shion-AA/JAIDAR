@@ -1,0 +1,55 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/editBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit" />
+
+        <EditText
+            android:id="@+id/locationInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Location"
+            android:enabled="false"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/backgroundInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Background"
+            android:minLines="3"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:enabled="false"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/experienceInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Experience"
+            android:minLines="3"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:enabled="false"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_marginTop="16dp"
+            android:visibility="gone" />
+    </LinearLayout>
+</ScrollView>
