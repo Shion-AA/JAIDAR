@@ -29,7 +29,7 @@
             android:name=".FAQAnswer"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".HomePageActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,7 +41,7 @@
             android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".HomePageActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".JobListingDetailsActivity"
