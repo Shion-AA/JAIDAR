@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
@@ -15,7 +16,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RecruitmentViewActivity extends AppCompatActivity {
 
-
+    View overlay;
+    ProgressBar spinner;
     private ImageView backBtn;
     private TextView rateValue, titleText;
     private TextView descriptionInput;
@@ -25,6 +27,10 @@ public class RecruitmentViewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recruitment_view);
+
+        overlay = findViewById(R.id.loading_overlay);
+        spinner = findViewById(R.id.loading_spinner);
+        showLoading();
 
         backBtn = findViewById(R.id.back_button);
         backBtn.setOnClickListener(v -> goBack());
@@ -36,9 +42,18 @@ public class RecruitmentViewActivity extends AppCompatActivity {
         fullNameView = findViewById(R.id.user_whole_name);
 
         //get intent here for job ID and pass it there
-        loadJobDetails("oIBOigR5k4rLGhT60taz");
+        loadJobDetails("cxACH6JkcFrlYC9GMcAt");
     }
 
+    private void showLoading(){
+        overlay.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoading(){
+        overlay.setVisibility(View.GONE);
+        spinner.setVisibility(View.GONE);
+    }
     private void goBack(){
         //imma replace this previousPage with variable passed from intent from last page.
         Class previousPage = HomePageActivity.class;
@@ -67,13 +82,17 @@ public class RecruitmentViewActivity extends AppCompatActivity {
                                 })
                                 .addOnFailureListener(e -> {
                                     fullNameView.setText("");
+                                }).addOnCompleteListener(task -> {
+                                    hideLoading();
                                 });
                     } else {
                         Toast.makeText(this, "Job not found.", Toast.LENGTH_SHORT).show();
+                        goBack();
                     }
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Failed to load job details.", Toast.LENGTH_SHORT).show();
+                    goBack();
                 });
     }
 

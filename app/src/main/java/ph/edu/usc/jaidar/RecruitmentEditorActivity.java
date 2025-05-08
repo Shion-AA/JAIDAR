@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -24,7 +25,8 @@ import java.util.Map;
 
 public class RecruitmentEditorActivity extends AppCompatActivity {
 
-    ConstraintLayout main;
+    View overlay;
+    ProgressBar spinner;
     ImageView backBtn;
     TextView userWholeNameText, userNameText;
     EditText titleInput, rateInput, descriptionInput, headcountCustomInput;
@@ -39,7 +41,9 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recruitment_editor);
 
-        main = findViewById(R.id.main);
+        overlay = findViewById(R.id.loading_overlay);
+        spinner = findViewById(R.id.loading_spinner);
+        showLoading();
 
         backBtn = findViewById(R.id.back_button);
         backBtn.setOnClickListener(v -> goBack());
@@ -62,6 +66,8 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
             }
         }).addOnFailureListener(e -> {
             userWholeNameText.setText("");
+        }).addOnCompleteListener(task -> {
+            hideLoading();
         });
 
         // Enable or disable custom headcount input
@@ -89,9 +95,18 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
         headcountCustomInput.setText("");
     }
 
+    private void showLoading(){
+        overlay.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoading(){
+        overlay.setVisibility(View.GONE);
+        spinner.setVisibility(View.GONE);
+    }
+
     private void saveJobOffer() {
-        main.setFocusable(false);
-        main.setClickable(false);   //hopefully this works to prevent user from editing form while in loading of upload.
+        showLoading();
 
         String title = titleInput.getText().toString().trim();
         String rateStr = rateInput.getText().toString().trim();
@@ -146,9 +161,8 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
                     startActivity(intent);
                 }).addOnFailureListener(e -> {
                         Toast.makeText(this, "Failed to post", Toast.LENGTH_SHORT).show();
-                }).addOnCompleteListener(e -> {
-                        main.setClickable(true);
-                        main.setFocusable(true);
+                }).addOnCompleteListener(task -> {
+                        hideLoading();
                 });
     }
 }
