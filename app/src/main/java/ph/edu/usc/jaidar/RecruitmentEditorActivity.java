@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,19 +24,22 @@ import java.util.Map;
 
 public class RecruitmentEditorActivity extends AppCompatActivity {
 
+    ConstraintLayout main;
     ImageView backBtn;
     TextView userWholeNameText, userNameText;
     EditText titleInput, rateInput, descriptionInput, headcountCustomInput;
     RadioButton headcountOption1, headcountOption2, headcountOption3;
     Button postButton;
 
-    FirebaseFirestore db;
-    String userId;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recruitment_editor);
+
+        main = findViewById(R.id.main);
 
         backBtn = findViewById(R.id.back_button);
         backBtn.setOnClickListener(v -> goBack());
@@ -51,8 +55,6 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
         headcountOption3 = findViewById(R.id.headcount_option3);
         postButton = findViewById(R.id.post_button);
 
-        db = FirebaseFirestore.getInstance();
-        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db.collection("users").document(userId).get().addOnSuccessListener(snapshot ->{
             if(snapshot.exists()) {
                 String wholeName = snapshot.getString("name");
@@ -88,6 +90,9 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
     }
 
     private void saveJobOffer() {
+        main.setFocusable(false);
+        main.setClickable(false);   //hopefully this works to prevent user from editing form while in loading of upload.
+
         String title = titleInput.getText().toString().trim();
         String rateStr = rateInput.getText().toString().trim();
         String description = descriptionInput.getText().toString().trim();
@@ -133,11 +138,17 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
         jobData.put("description", description);
         jobData.put("headcount", headcount);
 
-        db.collection("job_offers")
+        db.collection("job_recruitments")
                 .add(jobData)
-                .addOnSuccessListener(docRef ->
-                        Toast.makeText(this, "Job offer posted", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to post", Toast.LENGTH_SHORT).show());
+                .addOnSuccessListener(docRef -> {
+                    Toast.makeText(this, "Job offer posted", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
+                    startActivity(intent);
+                }).addOnFailureListener(e -> {
+                        Toast.makeText(this, "Failed to post", Toast.LENGTH_SHORT).show();
+                }).addOnCompleteListener(e -> {
+                        main.setClickable(true);
+                        main.setFocusable(true);
+                });
     }
 }

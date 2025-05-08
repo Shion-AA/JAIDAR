@@ -46,10 +46,10 @@ public class RecruitmentViewActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    private void loadJobDetails(String jobId) {
+    private void loadJobDetails(String jobRecruitmentId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("job_offers").document(jobId).get()
+        db.collection("job_recruitments").document(jobRecruitmentId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         double rate = documentSnapshot.getDouble("rate");
