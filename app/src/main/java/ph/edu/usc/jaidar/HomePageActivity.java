@@ -42,20 +42,6 @@ public class HomePageActivity extends AppCompatActivity {
 //                .addOnFailureListener(e -> {
 //                    nameTextView.setText("User"); // fallback
 //                });
-        String uid = mAuth.getCurrentUser().getUid();
-        TextView nameTextView = findViewById(R.id.name);
-        db.collection("users").document(uid).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        String name = documentSnapshot.getString("name");
-                        nameTextView.setText(name != null ? name : "User");
-                    } else {
-                        nameTextView.setText("User");
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    nameTextView.setText("User"); // fallback
-                });
 
         // Logout Button
         logoutBtn = findViewById(R.id.logout_button);
