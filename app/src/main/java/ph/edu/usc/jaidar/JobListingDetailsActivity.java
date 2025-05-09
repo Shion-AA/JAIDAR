@@ -2,6 +2,7 @@ package ph.edu.usc.jaidar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -11,10 +12,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class JobListingDetailsActivity extends AppCompatActivity {
 
     private ImageButton backBtn, companyLogo;
-    private TextView companyName, jobTitle, subtitle, aboutTitle, aboutDescription, overviewTitle, overviewDetails;
+    private TextView poster, jobTitle, subtitle, aboutDescription;
     private Button applyBtn, saveBtn;
     private ImageView waveBg;
 
@@ -23,21 +26,14 @@ public class JobListingDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_listing_details);
 
-        backBtn = findViewById(R.id.backBtn);
-        companyLogo = findViewById(R.id.companyLogo);
-        companyName = findViewById(R.id.companyName);
-        jobTitle = findViewById(R.id.jobTitle);
-        subtitle = findViewById(R.id.subtitle);
-        applyBtn = findViewById(R.id.applyBtn);
-        saveBtn = findViewById(R.id.saveBtn);
-        waveBg = findViewById(R.id.waveBg);
+        initialization();
+        jobTitle.setText(getIntent().getStringExtra("jobTitle"));
+        subtitle.setText(getIntent().getStringExtra("jobSubtitle"));
+        aboutDescription.setText(getIntent().getStringExtra("about"));
+        String uid = getIntent().getStringExtra("posterUid");
+        Log.d("POSTER_UID", "Received UID: [" + uid + "]");
 
-        aboutTitle = findViewById(R.id.aboutTitle);
-        aboutDescription = findViewById(R.id.aboutDescription);
-
-
-        overviewTitle = findViewById(R.id.overviewTitle);
-        overviewDetails = findViewById(R.id.overviewDetails);
+        getPoster(uid);
 
         backBtn.setOnClickListener(view -> finish());
 
@@ -48,5 +44,32 @@ public class JobListingDetailsActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(view -> {
             Toast.makeText(JobListingDetailsActivity.this, "Job saved!", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    public void getPoster(String uid){
+        if (uid != null) {
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(uid)
+                    .get()
+                    .addOnSuccessListener(snapshot -> {
+                        String name = snapshot.getString("name");
+                        poster.setText(name != null ? name : "Job Poster");
+                    })
+                    .addOnFailureListener(e -> {
+                        poster.setText("Error loading poster");
+                    });
+        }
+    }
+    public void initialization(){
+        backBtn = findViewById(R.id.backBtn);
+        companyLogo = findViewById(R.id.companyLogo);
+        poster = findViewById(R.id.poster);
+        jobTitle = findViewById(R.id.jobTitle);
+        subtitle = findViewById(R.id.subtitle);
+        applyBtn = findViewById(R.id.applyBtn);
+        saveBtn = findViewById(R.id.saveBtn);
+        waveBg = findViewById(R.id.waveBg);
+        aboutDescription = findViewById(R.id.aboutDescription);
     }
 }

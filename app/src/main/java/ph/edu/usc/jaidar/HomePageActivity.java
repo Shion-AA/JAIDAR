@@ -6,12 +6,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomePageActivity extends AppCompatActivity {
 
@@ -69,6 +77,49 @@ public class HomePageActivity extends AppCompatActivity {
         });
         //END TEMPORARY INTENT
 
+
+        Bottomnavigation();
+        Jobpostings(db);
+
+    }
+
+    public void Jobpostings(FirebaseFirestore db){
+        RecyclerView jobRecycler = findViewById(R.id.jobPreviewRecycler);
+        jobRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        List<JobPost> jobList = new ArrayList<>();
+        JobPreviewAdapter adapter = new JobPreviewAdapter(this, jobList);
+        jobRecycler.setAdapter(adapter);
+
+        db.collection("job_recruitments")
+//                .orderBy("timestamp", Query.Direction.DESCENDING) // Optional
+                .get()
+                .addOnSuccessListener(query -> {
+                    for (DocumentSnapshot doc : query) {
+                        String id = doc.getId();
+                        String title = doc.getString("title");
+                        String description = doc.getString("description");
+                        Long headcount = doc.getLong("headcount");
+                        Double rate = doc.getDouble("rate");
+                        String userPost = doc.getString("user_post");
+
+                        JobPost job = new JobPost(
+                                id,
+                                title,
+                                description,
+                                headcount != null ? headcount.intValue() : 0,
+                                rate != null ? rate : 0,
+                                userPost
+                        );
+                        jobList.add(job);
+                    }
+                    adapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load job offers: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+    private void Bottomnavigation(){
         // Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.home); // Highlight Home icon
@@ -87,6 +138,7 @@ public class HomePageActivity extends AppCompatActivity {
             else if (id == R.id.profile) {
                 String currentUid = mAuth.getCurrentUser().getUid();
                 Intent intent = new Intent(HomePageActivity.this, UserProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("profileUid", currentUid); // ✅ Pass UID
                 startActivity(intent);
                 return true;
