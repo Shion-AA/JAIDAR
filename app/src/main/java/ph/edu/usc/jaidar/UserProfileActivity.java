@@ -25,7 +25,7 @@ public class UserProfileActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore db;
     TextView nameDisplay, emailDisplay;
-    String uid;
+    String profileUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,20 +34,20 @@ public class UserProfileActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        uid = mAuth.getCurrentUser().getUid();
+        profileUid = getIntent().getStringExtra("profileUid");
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager = findViewById(R.id.viewPager);
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
+        ViewPageAdapter adapter = new ViewPageAdapter(this, profileUid);
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> tab.setText(position == 0 ? "About" : "Posts")
+                (tab, position) -> tab.setText(position == 0 ? "About" : "Reviews")
         ).attach();
 
         nameDisplay = findViewById(R.id.nameDisplay);
         emailDisplay = findViewById(R.id.emailDisplay);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             emailDisplay.setText(user.getEmail());
 

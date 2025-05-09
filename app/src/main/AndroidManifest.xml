@@ -14,7 +14,7 @@
         android:theme="@style/Theme.JAIDAR"
         tools:targetApi="31">
         <activity
-            android:name=".PostsFragment"
+            android:name=".ReviewsFragment"
             android:exported="false" />
         <activity
             android:name=".AboutFragment"

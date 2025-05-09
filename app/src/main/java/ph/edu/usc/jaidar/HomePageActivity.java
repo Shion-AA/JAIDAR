@@ -85,7 +85,10 @@ public class HomePageActivity extends AppCompatActivity {
 //                return true;
 //            }
             else if (id == R.id.profile) {
-                startActivity(new Intent(HomePageActivity.this, UserProfileActivity.class));
+                String currentUid = mAuth.getCurrentUser().getUid();
+                Intent intent = new Intent(HomePageActivity.this, UserProfileActivity.class);
+                intent.putExtra("profileUid", currentUid); // ✅ Pass UID
+                startActivity(intent);
                 return true;
             }
 
