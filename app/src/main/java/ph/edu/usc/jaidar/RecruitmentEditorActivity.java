@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -152,6 +153,7 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
         jobData.put("rate", rate);
         jobData.put("description", description);
         jobData.put("headcount", headcount);
+        jobData.put("posted_at", FieldValue.serverTimestamp());
 
         db.collection("job_recruitments")
                 .add(jobData)

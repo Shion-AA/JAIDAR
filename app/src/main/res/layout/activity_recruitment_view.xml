@@ -204,8 +204,10 @@
             android:layout_height="48dp"
             android:backgroundTint="#AA00FF"
             android:text="APPLY"
+            android:textColor="#FFFFFF"
             android:textSize="16dp"
             android:padding="0dp"
+            android:enabled="true"
             android:layout_gravity="center"/>
 
     </LinearLayout>
