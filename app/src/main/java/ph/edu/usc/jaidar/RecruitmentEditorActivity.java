@@ -154,6 +154,7 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
         jobData.put("description", description);
         jobData.put("headcount", headcount);
         jobData.put("posted_at", FieldValue.serverTimestamp());
+        jobData.put("status", "active");    //completed, cancelled? full?
 
         db.collection("job_recruitments")
                 .add(jobData)

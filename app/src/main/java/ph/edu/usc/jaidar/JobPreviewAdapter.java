@@ -50,6 +50,7 @@ public class JobPreviewAdapter extends RecyclerView.Adapter<JobPreviewAdapter.Vi
         // On click, open details activity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, JobListingDetailsActivity.class);
+            intent.putExtra("jobRecruitmentId", job.getId());
             intent.putExtra("jobTitle", job.getTitle());
             intent.putExtra("jobSubtitle", "₱" + job.getRate() + " • Headcount: " + job.getHeadcount());
             intent.putExtra("about", job.getDescription());
