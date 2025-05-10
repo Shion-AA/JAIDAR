@@ -72,7 +72,9 @@ public class JobListingDetailsActivity extends AppCompatActivity {
                     applyBtn.setEnabled(false);
                     Toast.makeText(this, "Failed to fetch job application status.", Toast.LENGTH_SHORT).show();
                 });
-        db.collection("job_recruitment_saves")
+        db.collection("users")
+                .document(userId)
+                .collection("job_recruitment_saves")
                 .whereEqualTo("job_recruitment", jobRecruitmentId)
                 .whereEqualTo("save_user", userId)
                 .get()
@@ -157,7 +159,9 @@ public class JobListingDetailsActivity extends AppCompatActivity {
         save.put("job_recruitment", jobRecruitmentId);
         save.put("saved_at", FieldValue.serverTimestamp());
 
-        db.collection("job_recruitment_saves")
+        db.collection("users")
+                .document(userId)
+                .collection("job_recruitment_saves")
                 .add(save)
                 .addOnSuccessListener(docRef -> {
                     saveBtn.setText("Saved!");
