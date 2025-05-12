@@ -1,5 +1,8 @@
 package ph.edu.usc.jaidar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class JobPost {
     private String id;
     private String title;
@@ -7,6 +10,7 @@ public class JobPost {
     private int headcount;
     private double rate;
     private String userPost;
+    private List<User> applicantList;
 
     public JobPost() {}
 
@@ -25,4 +29,13 @@ public class JobPost {
     public int getHeadcount() { return headcount; }
     public double getRate() { return rate; }
     public String getUserPost() { return userPost; }
+    public List<User> getAllApplicant(){
+        return this.applicantList;
+    }
+    public void addApplicant(User applicant){
+        this.applicantList.add(applicant);
+    }
+    public void setApplicants(List<User> applicantList){
+        this.applicantList = applicantList;
+    }
 }

@@ -25,6 +25,7 @@ public class JobListingDetailsActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String userId = FirebaseAuth.getInstance().getUid();
+    String jobRecruitmentId, posterUid;
     View overlay;
     ProgressBar spinner;
     private ImageButton backBtn, companyLogo;
@@ -40,75 +41,25 @@ public class JobListingDetailsActivity extends AppCompatActivity {
         spinner = findViewById(R.id.loading_spinner);
 
         initialization();
-        String jobRecruitmentId = getIntent().getStringExtra("jobRecruitmentId");
+        this.jobRecruitmentId = getIntent().getStringExtra("jobRecruitmentId");
         jobTitle.setText(getIntent().getStringExtra("jobTitle"));
         subtitle.setText(getIntent().getStringExtra("jobSubtitle"));
         aboutDescription.setText(getIntent().getStringExtra("about"));
-        String posterUid = getIntent().getStringExtra("posterUid");
-        Log.d("POSTER_UID", "Received UID: [" + posterUid + "]");
-
-        getPoster(posterUid);
+        this.posterUid = getIntent().getStringExtra("posterUid");
 
         backBtn.setOnClickListener(view -> finish());
+        getPoster();
 
-        db.collection("job_recruitment_apply")
-                .whereEqualTo("job_recruitment", jobRecruitmentId)
-                .whereEqualTo("apply_user", userId)
-                .whereEqualTo("status", "active")
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    if(!snapshot.isEmpty()){
-                        applyBtn.setText("Applied!");
-                        applyBtn.setEnabled(false);
-                    } else {
-                        applyBtn.setText("Apply");
-                        applyBtn.setEnabled(true);
-                        applyBtn.setOnClickListener(view -> {
-                            apply(jobRecruitmentId);
-                        });
-                    }
-                }).addOnFailureListener(e -> {
-                    applyBtn.setText("Error");
-                    applyBtn.setEnabled(false);
-                    Toast.makeText(this, "Failed to fetch job application status.", Toast.LENGTH_SHORT).show();
-                });
-        db.collection("job_recruitment_saves")
-                .whereEqualTo("job_recruitment", jobRecruitmentId)
-                .whereEqualTo("save_user", userId)
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    if(!snapshot.isEmpty()){
-                        saveBtn.setText("Saved!");
-                        saveBtn.setEnabled(false);
-                    } else {
-                        saveBtn.setText("Save");
-                        saveBtn.setEnabled(true);
-                        saveBtn.setOnClickListener(view -> {
-                            save(jobRecruitmentId);
-                        });
-                    }
-                }).addOnFailureListener(e -> {
-                    saveBtn.setText("Error");
-                    saveBtn.setEnabled(false);
-                    Toast.makeText(this, "Failed to fetch job save status.", Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    public void getPoster(String uid){
-        if (uid != null) {
-            FirebaseFirestore.getInstance()
-                    .collection("users")
-                    .document(uid)
-                    .get()
-                    .addOnSuccessListener(snapshot -> {
-                        String name = snapshot.getString("name");
-                        poster.setText(name != null ? name : "Job Poster");
-                    })
-                    .addOnFailureListener(e -> {
-                        poster.setText("Error loading poster");
-                    });
+        Log.d("POSTER_UID", "Received UID: [" + this.posterUid + "]" + "Current uid: [" + this.userId + "]");
+        if(isOwner()){
+            applyBtn.setVisibility(View.GONE);
+            saveBtn.setVisibility(View.GONE);
+        } else {
+            setApplyButton();
+            setSaveButton();
         }
     }
+
     public void initialization(){
         backBtn = findViewById(R.id.backBtn);
         companyLogo = findViewById(R.id.companyLogo);
@@ -119,6 +70,71 @@ public class JobListingDetailsActivity extends AppCompatActivity {
         saveBtn = findViewById(R.id.saveBtn);
         waveBg = findViewById(R.id.waveBg);
         aboutDescription = findViewById(R.id.aboutDescription);
+    }
+    public void getPoster(){
+        if (posterUid != null) {
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(posterUid)
+                    .get()
+                    .addOnSuccessListener(snapshot -> {
+                        String name = snapshot.getString("name");
+                        poster.setText(name != null ? name : "Job Poster");
+                    })
+                    .addOnFailureListener(e -> {
+                        poster.setText("Error loading poster");
+                    });
+        }
+    }
+    private boolean isOwner(){
+        return (this.userId.equals(this.posterUid)) ? true : false;
+    }
+    private void setApplyButton(){
+        db.collection("job_recruitment_apply")
+            .whereEqualTo("job_recruitment", jobRecruitmentId)
+            .whereEqualTo("apply_user", userId)
+            .whereEqualTo("status", "active")
+            .get()
+            .addOnSuccessListener(snapshot -> {
+                if(!snapshot.isEmpty()){
+                    applyBtn.setText("Applied!");
+                    applyBtn.setEnabled(false);
+                } else {
+                    applyBtn.setText("Apply");
+                    applyBtn.setEnabled(true);
+                    applyBtn.setOnClickListener(view -> {
+                        apply(jobRecruitmentId);
+                    });
+                }
+            }).addOnFailureListener(e -> {
+                applyBtn.setText("Error");
+                applyBtn.setEnabled(false);
+                Toast.makeText(this, "Failed to fetch job application status.", Toast.LENGTH_SHORT).show();
+            });
+    }
+    private void setSaveButton(){
+        db.collection("users")
+            .document(userId)
+            .collection("job_recruitment_saves")
+            .whereEqualTo("job_recruitment", jobRecruitmentId)
+            .whereEqualTo("save_user", userId)
+            .get()
+            .addOnSuccessListener(snapshot -> {
+                if(!snapshot.isEmpty()){
+                    saveBtn.setText("Saved!");
+                    saveBtn.setEnabled(false);
+                } else {
+                    saveBtn.setText("Save");
+                    saveBtn.setEnabled(true);
+                    saveBtn.setOnClickListener(view -> {
+                        save(jobRecruitmentId);
+                    });
+                }
+            }).addOnFailureListener(e -> {
+                saveBtn.setText("Error");
+                saveBtn.setEnabled(false);
+                Toast.makeText(this, "Failed to fetch job save status.", Toast.LENGTH_SHORT).show();
+            });
     }
     private void showLoading(){
         overlay.setVisibility(View.VISIBLE);
@@ -157,7 +173,9 @@ public class JobListingDetailsActivity extends AppCompatActivity {
         save.put("job_recruitment", jobRecruitmentId);
         save.put("saved_at", FieldValue.serverTimestamp());
 
-        db.collection("job_recruitment_saves")
+        db.collection("users")
+                .document(userId)
+                .collection("job_recruitment_saves")
                 .add(save)
                 .addOnSuccessListener(docRef -> {
                     saveBtn.setText("Saved!");

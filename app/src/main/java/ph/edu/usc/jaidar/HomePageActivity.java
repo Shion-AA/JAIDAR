@@ -130,6 +130,10 @@ public class HomePageActivity extends AppCompatActivity {
             if (id == R.id.home) {
                 // Already on Home - do nothing
                 return true;
+            } else if (id == R.id.activity){
+                Intent intent = new Intent(HomePageActivity.this, ActivitySectionActivity.class);
+                startActivity(intent);
+                return true;
             }
 //            else if (id == R.id.message) {
 //                startActivity(new Intent(HomePageActivity.this, MessageActivity.class));

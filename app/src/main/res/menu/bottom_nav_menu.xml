@@ -5,6 +5,10 @@
         android:title="Home"
         android:icon="@drawable/home_nav"/>
     <item
+        android:id="@+id/activity"
+        android:title="Activity"
+        android:icon="@drawable/activity_nav"/>
+    <item
         android:id="@+id/message"
         android:title="Message"
         android:icon="@drawable/message_nav"/>
