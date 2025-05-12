@@ -2,7 +2,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp"
     android:background="#EFEFEF"
     android:layout_marginBottom="8dp">
 
@@ -10,12 +9,17 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold" />
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="8dp" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+
         <TextView
             android:id="@+id/applicant_number"
             android:layout_width="wrap_content"
@@ -27,7 +31,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="/"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp" />
 
         <TextView
             android:id="@+id/headcount"
@@ -40,7 +46,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="applicants"
-            android:textStyle="bold" />
-
+            android:textStyle="bold"
+            android:paddingStart="4dp" />
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/applicant_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp" />
+
 </LinearLayout>
