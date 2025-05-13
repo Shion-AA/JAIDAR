@@ -135,10 +135,10 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             }
-//            else if (id == R.id.message) {
-//                startActivity(new Intent(HomePageActivity.this, MessageActivity.class));
-//                return true;
-//            }
+            else if (id == R.id.message) {
+                startActivity(new Intent(HomePageActivity.this, UserListActivity.class));
+                return true;
+            }
             else if (id == R.id.profile) {
                 String currentUid = mAuth.getCurrentUser().getUid();
                 Intent intent = new Intent(HomePageActivity.this, UserProfileActivity.class);

@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ph.edu.usc.jaidar">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JAIDAR"
         tools:targetApi="31">
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserListActivity"
+            android:exported="false" />
         <activity
             android:name=".ActivitySectionActivity"
             android:exported="false" />
