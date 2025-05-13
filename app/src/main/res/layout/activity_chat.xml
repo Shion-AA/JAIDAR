@@ -7,16 +7,35 @@
     android:background="#FFFFFF">
 
     <!-- Chat Header -->
-    <TextView
-        android:id="@+id/chatHeaderText"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="25dp"
-        android:text="Chat Header"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:background="#E0E0E0" />
+        android:orientation="horizontal"
+        android:background="#E0E0E0">
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginBottom="12dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/back_btn"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <TextView
+            android:id="@+id/chatHeaderText"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:gravity="bottom|center_horizontal"
+            android:paddingBottom="12dp"
+            android:text="Chat Header"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
 
     <!-- Chat Messages -->
     <androidx.recyclerview.widget.RecyclerView

@@ -1,10 +1,12 @@
 package ph.edu.usc.jaidar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,8 @@ public class ChatActivity extends AppCompatActivity {
     ImageButton sendButton;
     TextView chatHeaderTextView;
 
+    ImageView backBtn;
+
     FirebaseAuth mAuth;
     FirebaseFirestore db;
 
@@ -52,6 +56,9 @@ public class ChatActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.chatSendButton);
         chatHeaderTextView = findViewById(R.id.chatHeaderText);
 
+        backBtn = findViewById(R.id.back_button);
+        backBtn.setOnClickListener(v -> goBack());
+
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -59,7 +66,6 @@ public class ChatActivity extends AppCompatActivity {
         receiverEmail = getIntent().getStringExtra("receiverEmail");
         receiverName = getIntent().getStringExtra("receiverName");
 
-//        setTitle("Chat with " + receiverName);
         chatHeaderTextView.setText(receiverName);
 
         messageList = new ArrayList<>();
@@ -73,6 +79,12 @@ public class ChatActivity extends AppCompatActivity {
         loadMessages();
 
         sendButton.setOnClickListener(v -> sendMessage());
+    }
+
+    private void goBack(){
+        Class previousPage = UserListActivity.class;
+        Intent intent = new Intent(this, previousPage);
+        this.startActivity(intent);
     }
 
     private void sendMessage() {
