@@ -4,12 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <EditText
+    <TextView
         android:id="@+id/reviewerNameInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Your Name"
-        android:inputType="textPersonName" />
+        />
 
     <RatingBar
         android:id="@+id/ratingBarInput"

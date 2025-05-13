@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- (Optional) Leave this button out if you're not allowing review on self -->
     <Button
         android:id="@+id/writeReviewBtn"
         android:layout_width="match_parent"
