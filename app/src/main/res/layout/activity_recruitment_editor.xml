@@ -27,11 +27,11 @@
                 android:src="@drawable/back_btn"
                 android:padding="10dp"
                 />
-            <TextView
+            <TextView android:id="@+id/top_context"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Create Job Offer" />
+                android:text="" />
 
         </LinearLayout>
 
@@ -106,9 +106,8 @@
         <EditText android:id="@+id/title_input"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:hint="Job offer headline "
+            android:hint="Post headline"
             android:inputType="textMultiLine"
-            android:lines="1"
             android:maxLines="2"
             android:background="@drawable/bg_border" />
 
@@ -183,27 +182,60 @@
 
     </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/tag_section"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:layout_margin="10dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/desc_section">-->
+    <LinearLayout
+        android:id="@+id/tag_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:background="@drawable/bg_border"
+        app:layout_constraintTop_toBottomOf="@id/desc_section">
 
-<!--        <LinearLayout-->
-<!--            android:id="@+id/tag_list"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:background="@drawable/bg_rounded_card"-->
-<!--            >-->
-<!--            -->
-<!--            -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView android:id="@+id/tag_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Assign a tag"
+                android:textStyle="bold"
+                android:padding="8dp"/>
+            <TextView
+                android:id="@+id/current_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#FFFFFF"
+                android:padding="8dp"
+                android:background="@drawable/bg_tag_selected"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/cancel_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⨉"
+                android:textStyle="bold"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                />
+        </LinearLayout>
 
-<!--        </LinearLayout>-->
-
-<!--    </LinearLayout> -->
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/tag_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:flexWrap="wrap"
+            app:justifyContent="flex_start"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_rounded_card"
+            android:padding="8dp" />
+    </LinearLayout>
 
     <LinearLayout android:id="@+id/headcount_section"
         android:layout_width="match_parent"
@@ -299,61 +331,75 @@
 
     </LinearLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp">
+
     <LinearLayout android:id="@+id/upload_option_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/headcount_section">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload Options"
-            android:textStyle="bold"
-            android:textAlignment="textStart"
-            android:textColor="#888888" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/headcount_section" >
-
-            <RadioGroup android:id="@+id/upload_option_radio"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:text="Upload Options"
+                android:textStyle="bold"
+                android:textAlignment="textStart"
+                android:textColor="#888888" />
 
-                <RadioButton
-                    android:id="@+id/radio_option1"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/headcount_section" >
+
+                <RadioGroup android:id="@+id/upload_option_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="12dp"
-                    android:text="Private" />
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/radio_option2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Public" />
+                    <RadioButton
+                        android:id="@+id/radio_option1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="12dp"
+                        android:text="Private" />
 
-            </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radio_option2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Public" />
 
-            <Button android:id="@+id/post_button"
-                android:layout_width="96dp"
-                android:layout_height="48dp"
-                android:backgroundTint="#AA00FF"
-                android:text="POST"
-                android:textSize="16dp"
-                android:padding="0dp"
-                android:layout_gravity="right"/>
+                </RadioGroup>
+
+                <Button android:id="@+id/action_button"
+                    android:layout_width="96dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#AA00FF"
+                    android:text="POST"
+                    android:textSize="16dp"
+                    android:padding="0dp"
+                    android:layout_gravity="right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/loading_overlay"

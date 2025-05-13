@@ -68,6 +68,7 @@ public class HomePageActivity extends AppCompatActivity {
         TEMPEDITOR = findViewById(R.id.TEMP_EDITOR);
         TEMPEDITOR.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), RecruitmentEditorActivity.class);
+            intent.putExtra(RecruitmentEditorActivity.USER_ROLE, RecruitmentEditorActivity.HIRER); //WORKER or HIRER
             startActivity(intent);
         });
         TEMPVIEW = findViewById(R.id.TEMP_VIEW);
