@@ -78,7 +78,7 @@ public class HomePageActivity extends AppCompatActivity {
         //END TEMPORARY INTENT
 
 
-        Bottomnavigation();
+        Bottomnavigation(mAuth);
         Jobpostings(db);
 
     }
@@ -119,31 +119,27 @@ public class HomePageActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to load job offers: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
-    private void Bottomnavigation(){
-        // Bottom Navigation
+    private void Bottomnavigation(FirebaseAuth mAuth) {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.home); // Highlight Home icon
+        bottomNavigationView.setSelectedItemId(R.id.home); // ✅ Always highlight Home in homepage
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
 
             if (id == R.id.home) {
-                // Already on Home - do nothing
+                return true; // already here
+            } else if (id == R.id.activity) {
+                startActivity(new Intent(HomePageActivity.this, ActivitySectionActivity.class));
                 return true;
-            } else if (id == R.id.activity){
-                Intent intent = new Intent(HomePageActivity.this, ActivitySectionActivity.class);
-                startActivity(intent);
-                return true;
-            }
 //            else if (id == R.id.message) {
 //                startActivity(new Intent(HomePageActivity.this, MessageActivity.class));
 //                return true;
 //            }
-            else if (id == R.id.profile) {
-                String currentUid = mAuth.getCurrentUser().getUid();
+            } else if (id == R.id.profile) {
+                String currentUid = mAuth.getUid();
                 Intent intent = new Intent(HomePageActivity.this, UserProfileActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("profileUid", currentUid); // ✅ Pass UID
+                intent.putExtra("profileUid", currentUid);
                 startActivity(intent);
                 return true;
             }

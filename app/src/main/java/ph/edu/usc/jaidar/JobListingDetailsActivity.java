@@ -49,7 +49,11 @@ public class JobListingDetailsActivity extends AppCompatActivity {
 
         backBtn.setOnClickListener(view -> finish());
         getPoster();
-
+        poster.setOnClickListener(v -> {
+            Intent intent = new Intent(JobListingDetailsActivity.this, UserProfileActivity.class);
+            intent.putExtra("profileUid", posterUid);
+            startActivity(intent);
+        });
         Log.d("POSTER_UID", "Received UID: [" + this.posterUid + "]" + "Current uid: [" + this.userId + "]");
         if(isOwner()){
             applyBtn.setVisibility(View.GONE);

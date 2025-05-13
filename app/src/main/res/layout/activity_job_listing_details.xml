@@ -46,7 +46,10 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="25sp"
-                android:text="User" />
+                android:text="User"
+                android:textColor="#FFAAAA"
+                android:clickable="true"
+                android:focusable="true" />
         </LinearLayout>
         <TextView
             android:id="@+id/jobTitle"
