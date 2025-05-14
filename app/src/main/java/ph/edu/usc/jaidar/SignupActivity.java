@@ -63,8 +63,9 @@ public class SignupActivity extends AppCompatActivity {
                             if (user != null) {
                                 String uid = user.getUid();
 
-                                // Add additional fields to Firestore
+                                // ✅ Add additional fields to Firestore
                                 Map<String, Object> userMap = new HashMap<>();
+                                userMap.put("uid", uid); // ✅ This line was added
                                 userMap.put("name", name);
                                 userMap.put("email", email);
 
