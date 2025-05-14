@@ -57,7 +57,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.View
         holder.headcount.setText(String.valueOf(jobPost.getHeadcount())); // assuming it's in JobPost
 
         // Set up nested RecyclerView
-        ApplicantAdapter adapter = new ApplicantAdapter(this.context, applicants);
+        ApplicantAdapter adapter = new ApplicantAdapter(this.context, postList.get(position));
         holder.applicantList.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.applicantList.setAdapter(adapter);
     }

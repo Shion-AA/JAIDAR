@@ -63,7 +63,9 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selected = categories[position];
-                Toast.makeText(HomePageActivity.this, "Selected: " + selected, Toast.LENGTH_SHORT).show();
+                if(selected != null && !selected.equals("Choose")) {
+                    Toast.makeText(HomePageActivity.this, "Selected: " + selected, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -144,6 +146,7 @@ public class HomePageActivity extends AppCompatActivity {
                         String tag = doc.getString("tag");
                         Double rate = doc.getDouble("rate");
                         String userPost = doc.getString("user_post");
+                        String status = doc.getString("status");
 
                         JobPost job = new JobPost(
                                 id,
@@ -152,7 +155,8 @@ public class HomePageActivity extends AppCompatActivity {
                                 headcount != null ? headcount.intValue() : 0,
                                 tag,
                                 rate != null ? rate : 0,
-                                userPost
+                                userPost,
+                                status
                         );
                         jobList.add(job);
                     }

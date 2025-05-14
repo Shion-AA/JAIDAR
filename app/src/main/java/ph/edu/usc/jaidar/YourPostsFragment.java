@@ -83,7 +83,8 @@ public class YourPostsFragment extends Fragment {
                                 doc.getLong("headcount").intValue(),
                                 doc.getString("tag"),
                                 doc.getDouble("rate"),
-                                doc.getString("user_post")
+                                doc.getString("user_post"),
+                                doc.getString("status")
                         );
                         postMap.put(doc.getId(), jp);
                     }
@@ -94,16 +95,23 @@ public class YourPostsFragment extends Fragment {
                             .get()
                             .addOnSuccessListener(applySnap -> {
                                 Map<String, List<String>> postToApplicants = new HashMap<>();
+                                Map<String, String> userStatusMap = new HashMap<>();
+                                Map<String, String> userToApplyMap = new HashMap<>();
                                 for (QueryDocumentSnapshot applyDoc : applySnap) {
+                                    String applyId = applyDoc.getId();
                                     String postId = applyDoc.getString("job_recruitment");
                                     String userId = applyDoc.getString("apply_user");
+                                    String status = applyDoc.getString("status");
 
                                     if (postId != null && userId != null) {
                                         postToApplicants
                                                 .computeIfAbsent(postId, k -> new ArrayList<>())
                                                 .add(userId);
+                                        userStatusMap.put(userId, status);
+                                        userToApplyMap.put(userId, applyId);
                                     }
                                 }
+
 
                                 // Step 3: Batch-fetch user details for all applicants
                                 Set<String> allUserIds = new HashSet<>();
@@ -125,7 +133,10 @@ public class YourPostsFragment extends Fragment {
                                                     DocumentSnapshot userDoc = (DocumentSnapshot) result;
                                                     User user = userDoc.toObject(User.class);
                                                     if (user != null) {
-                                                        user.setUid(userDoc.getId());
+                                                        String userid = userDoc.getId();
+                                                        user.setUid(userid);
+                                                        user.setApplicationStatus(userStatusMap.get(userid));
+                                                        user.setJob_recruitment_apply_id(userToApplyMap.get(userid));
                                                         users.put(user.getUid(), user);
                                                     }
                                                 }

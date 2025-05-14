@@ -97,7 +97,7 @@ public class JobListingDetailsActivity extends AppCompatActivity {
         db.collection("job_recruitment_apply")
             .whereEqualTo("job_recruitment", jobRecruitmentId)
             .whereEqualTo("apply_user", userId)
-            .whereEqualTo("status", "active")
+            .whereEqualTo("status", "pending")
             .get()
             .addOnSuccessListener(snapshot -> {
                 if(!snapshot.isEmpty()){

@@ -11,11 +11,12 @@ public class JobPost {
     private String tag;
     private double rate;
     private String userPost;
+    private String status;
     private List<User> applicantList;
 
     public JobPost() {}
 
-    public JobPost(String id, String title, String description, int headcount, String tag, double rate, String userPost) {
+    public JobPost(String id, String title, String description, int headcount, String tag, double rate, String userPost, String status) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -23,6 +24,7 @@ public class JobPost {
         this.tag = tag;
         this.rate = rate;
         this.userPost = userPost;
+        this.status = status;
     }
 
     public String getId() { return id; }
@@ -36,6 +38,12 @@ public class JobPost {
     }
     public void addApplicant(User applicant){
         this.applicantList.add(applicant);
+    }
+    public String getStatus(){
+        return this.status;
+    }
+    public void setStatus(String status){
+        this.status = status;
     }
     public void setApplicants(List<User> applicantList){
         this.applicantList = applicantList;
