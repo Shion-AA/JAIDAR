@@ -67,6 +67,11 @@ public class ChatActivity extends AppCompatActivity {
         senderEmail = mAuth.getCurrentUser().getEmail();
         receiverEmail = getIntent().getStringExtra("receiverEmail");
         receiverName = getIntent().getStringExtra("receiverName");
+        if(receiverEmail == null || senderEmail == null){
+            Toast.makeText(ChatActivity.this, "Error Missing Email", Toast.LENGTH_SHORT).show();
+            goBack();
+            return;
+        }
 
         chatHeaderTextView.setText(receiverName);
 
@@ -122,8 +127,11 @@ public class ChatActivity extends AppCompatActivity {
                             String receiver = doc.getString("receiver");
                             String text = doc.getString("message");
 
-                            if ((sender.equals(senderEmail) && receiver.equals(receiverEmail)) ||
-                                    (sender.equals(receiverEmail) && receiver.equals(senderEmail))) {
+                            if (
+                                    (sender != null && receiver != null && text != null) &&
+                                            ((sender.equals(senderEmail) && receiver.equals(receiverEmail)) ||
+                                                    (sender.equals(receiverEmail) && receiver.equals(senderEmail)))
+                            ) {
                                 messageList.add(new MessageModel(sender, receiver, text));
                             }
                         }

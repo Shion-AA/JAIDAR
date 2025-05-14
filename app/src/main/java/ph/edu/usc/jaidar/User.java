@@ -9,6 +9,8 @@ public class User {
     private String location;
     private String experience;
     private String background;
+    private String applicationStatus; //optional to use
+    private String job_recruitment_apply_id;
     public User(){};
     public User(String uid, String name, String email, String gender, int age, String location, String experience, String background) {
         this.uid = uid;
@@ -46,6 +48,8 @@ public class User {
     public String getBackground() {
         return this.background;
     }
+    public String getApplicationStatus(){return this.applicationStatus;}
+    public String getJob_recruitment_apply_id(){ return this.job_recruitment_apply_id; }
 
 //    setter
     public void setUid(String uid) {
@@ -79,4 +83,6 @@ public class User {
     public void setBackground(String background) {
         this.background = background;
     }
+    public void setApplicationStatus(String applicationStatus){this.applicationStatus = applicationStatus; }
+    public void setJob_recruitment_apply_id(String job_recruitment_apply_id){ this.job_recruitment_apply_id = job_recruitment_apply_id; }
 }

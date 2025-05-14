@@ -39,7 +39,8 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
     public static final String USER_ROLE = "user_role";
     public static final String WORKER = "worker";
     public static final String HIRER = "hirer";
-    String[] arrTags = {"Electrician", "Plumber", "Carpenter", "Welding", "Roofer", "Mechanic", "Caretaker", "Ironworker"};
+    String[] arrTags = {"Electrician", "Plumber", "Carpenter", "Welding",
+            "Roofer", "Mechanic", "Caretaker", "Ironworker"};
     List<String> tags = new ArrayList<>(Arrays.asList(arrTags));
     ImageView backBtn;
     TextView userWholeNameText, userNameText, currentTagView, cancelTagView, tagPrompt, topContext;
@@ -97,6 +98,7 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
                 setTopContext(HIRER);
                 setTitleHint(HIRER);
                 enableHeadcountSection();
+                enableTagSection();
                 enablePostButton();
             } else if (role.equals(WORKER)) {
                 //Creates List your services
@@ -238,6 +240,7 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
         String title = titleInput.getText().toString().trim();
         String rateStr = rateInput.getText().toString().trim();
         String description = descriptionInput.getText().toString().trim();
+        String tag = currentTagView.getText().toString().trim();
         String headcountStr = "0";
 
         if (TextUtils.isEmpty(title)) {
@@ -254,6 +257,12 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
 
         if (TextUtils.isEmpty(description)) {
             descriptionInput.setError("Description is required");
+            hideLoading();
+            return;
+        }
+
+        if(TextUtils.isEmpty(tag)){
+            Toast.makeText(this, "1 Tag must be chosen", Toast.LENGTH_SHORT).show();
             hideLoading();
             return;
         }
@@ -284,6 +293,7 @@ public class RecruitmentEditorActivity extends AppCompatActivity {
         jobData.put("rate", rate);
         jobData.put("description", description);
         jobData.put("headcount", headcount);
+        jobData.put("tag", tag);
         jobData.put("posted_at", FieldValue.serverTimestamp());
         jobData.put("status", "active");    //completed, cancelled? full?
 
