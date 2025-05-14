@@ -74,21 +74,6 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-
-
-        // Logout Button
-        logoutBtn = findViewById(R.id.logout_button);
-        logoutBtn.setOnClickListener(v -> {
-            mAuth.signOut();
-            SharedPreferences sharedPreferences = getSharedPreferences("userpref", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
-
-            Intent intent = new Intent(getApplicationContext(), LandingPageActivity.class);
-            startActivity(intent);
-            finish();
-        });
         //TEMPORARY BUTTON FOR INTENT. DELETE LATER
         TEMPEDITOR = findViewById(R.id.btnHiring);
         worker = findViewById(R.id.btnWorker);

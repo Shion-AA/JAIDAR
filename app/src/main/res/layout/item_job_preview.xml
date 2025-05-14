@@ -16,7 +16,6 @@
         android:backgroundTint="#D1C4E9"
         android:background="@drawable/bg_rounded_image"
         android:clipToOutline="true" />
-/>
     <TextView
         android:id="@+id/jobTitle"
         android:layout_width="match_parent"

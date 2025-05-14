@@ -1,8 +1,11 @@
 package ph.edu.usc.jaidar.profile;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +19,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import ph.edu.usc.jaidar.ActivitySectionActivity;
 import ph.edu.usc.jaidar.HomePageActivity;
+import ph.edu.usc.jaidar.LandingPageActivity;
 import ph.edu.usc.jaidar.R;
+import ph.edu.usc.jaidar.messaging.UserListActivity;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -63,6 +68,18 @@ public class UserProfileActivity extends AppCompatActivity {
         }
         navigation(mAuth);
 
+        Button logoutBtn = findViewById(R.id.logoutButton);
+        logoutBtn.setOnClickListener(v -> {
+            mAuth.signOut();
+            SharedPreferences sharedPreferences = getSharedPreferences("userpref", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+
+            Intent intent = new Intent(getApplicationContext(), LandingPageActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void navigation(FirebaseAuth mAuth){
@@ -83,10 +100,10 @@ public class UserProfileActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ActivitySectionActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-//            } else if (id == R.id.message) {
-//                startActivity(new Intent(this, MessageActivity.class));
-//                overridePendingTransition(0, 0);
-//                return true;
+            } else if (id == R.id.message) {
+                startActivity(new Intent(this, UserListActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
             } else if (id == R.id.profile) {
                 Intent intent = new Intent(this, UserProfileActivity.class);
                 intent.putExtra("profileUid", currentUid);
