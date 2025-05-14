@@ -1,31 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF">
+    android:background="@drawable/bg_border"
+    android:backgroundTint="#FFFFFF">
 
-    <TextView
-        android:id="@+id/applicant_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:orientation="vertical"
+        android:gravity="start"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/applicant_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/applicant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textStyle="bold"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/applicant_location"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/applicant_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/applicant_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="14sp" />
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_weight="1" >
+
+        <ImageView android:id="@+id/chat_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/icon_chat"
+            android:background="@drawable/bg_circle"
+            android:scaleType="centerCrop"
+            android:clipToOutline="true" />
+
+        <Button android:id="@+id/action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

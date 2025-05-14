@@ -1,5 +1,6 @@
 package ph.edu.usc.jaidar;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,10 @@ import java.util.List;
 
 public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.ViewHolder> {
     private final List<JobPost> postList;
+    private final Context context;
 
-    public YourPostsAdapter(List<JobPost> list) {
+    public YourPostsAdapter(Context context, List<JobPost> list) {
+        this.context = context;
         this.postList = list;
     }
 
@@ -54,7 +57,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.View
         holder.headcount.setText(String.valueOf(jobPost.getHeadcount())); // assuming it's in JobPost
 
         // Set up nested RecyclerView
-        ApplicantAdapter adapter = new ApplicantAdapter(applicants);
+        ApplicantAdapter adapter = new ApplicantAdapter(this.context, applicants);
         holder.applicantList.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.applicantList.setAdapter(adapter);
     }

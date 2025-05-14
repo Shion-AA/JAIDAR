@@ -1,5 +1,6 @@
 package ph.edu.usc.jaidar;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +33,15 @@ import android.util.Log;
 
 public class YourPostsFragment extends Fragment {
 
+    private final Context context;
     private RecyclerView recyclerView;
     private TextView emptyView;
     private FirebaseFirestore db;
     private List<JobPost> postList;
     private YourPostsAdapter adapter;
+    public YourPostsFragment(Context context){
+        this.context = context;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -48,7 +53,7 @@ public class YourPostsFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         postList = new ArrayList<>();
-        adapter = new YourPostsAdapter(postList);
+        adapter = new YourPostsAdapter(context, postList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
@@ -76,6 +81,7 @@ public class YourPostsFragment extends Fragment {
                                 doc.getString("title"),
                                 doc.getString("description"),
                                 doc.getLong("headcount").intValue(),
+                                doc.getString("tag"),
                                 doc.getDouble("rate"),
                                 doc.getString("user_post")
                         );

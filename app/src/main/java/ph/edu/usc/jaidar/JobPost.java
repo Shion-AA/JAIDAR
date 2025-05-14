@@ -8,17 +8,19 @@ public class JobPost {
     private String title;
     private String description;
     private int headcount;
+    private String tag;
     private double rate;
     private String userPost;
     private List<User> applicantList;
 
     public JobPost() {}
 
-    public JobPost(String id, String title, String description, int headcount, double rate, String userPost) {
+    public JobPost(String id, String title, String description, int headcount, String tag, double rate, String userPost) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.headcount = headcount;
+        this.tag = tag;
         this.rate = rate;
         this.userPost = userPost;
     }

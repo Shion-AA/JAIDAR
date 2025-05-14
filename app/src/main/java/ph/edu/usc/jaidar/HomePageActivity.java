@@ -141,6 +141,7 @@ public class HomePageActivity extends AppCompatActivity {
                         String title = doc.getString("title");
                         String description = doc.getString("description");
                         Long headcount = doc.getLong("headcount");
+                        String tag = doc.getString("tag");
                         Double rate = doc.getDouble("rate");
                         String userPost = doc.getString("user_post");
 
@@ -149,6 +150,7 @@ public class HomePageActivity extends AppCompatActivity {
                                 title,
                                 description,
                                 headcount != null ? headcount.intValue() : 0,
+                                tag,
                                 rate != null ? rate : 0,
                                 userPost
                         );
