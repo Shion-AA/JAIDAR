@@ -72,7 +72,7 @@ public class SignupActivity extends AppCompatActivity {
                                 db.collection("users").document(uid).set(userMap)
                                         .addOnSuccessListener(aVoid -> {
                                             Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(SignupActivity.this, HomePageActivity.class));
+                                            startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                             finish();
                                         })
                                         .addOnFailureListener(e -> {

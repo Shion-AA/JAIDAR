@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.clear();
                         editor.apply();
                     }
-                    Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 } else {
                     this.password.setText("");

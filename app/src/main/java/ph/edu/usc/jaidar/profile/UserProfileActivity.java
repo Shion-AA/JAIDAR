@@ -1,11 +1,12 @@
 package ph.edu.usc.jaidar.profile;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import ph.edu.usc.jaidar.ActivitySectionActivity;
 import ph.edu.usc.jaidar.HomePageActivity;
 import ph.edu.usc.jaidar.LandingPageActivity;
 import ph.edu.usc.jaidar.R;
+import ph.edu.usc.jaidar.messaging.ChatActivity;
 import ph.edu.usc.jaidar.messaging.UserListActivity;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -29,6 +31,7 @@ public class UserProfileActivity extends AppCompatActivity {
     FirebaseFirestore db;
     TextView nameDisplay, emailDisplay;
     String profileUid;
+    String name = "", email = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class UserProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         profileUid = getIntent().getStringExtra("profileUid");
+
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager = findViewById(R.id.viewPager);
 
@@ -50,12 +54,15 @@ public class UserProfileActivity extends AppCompatActivity {
 
         nameDisplay = findViewById(R.id.nameDisplay);
         emailDisplay = findViewById(R.id.emailDisplay);
+
         if (profileUid != null) {
             db.collection("users").document(profileUid).get()
                     .addOnSuccessListener(snapshot -> {
                         if (snapshot.exists()) {
-                            nameDisplay.setText(snapshot.getString("name"));
-                            emailDisplay.setText(snapshot.getString("email")); // use Firestore email
+                            name = snapshot.getString("name");
+                            email = snapshot.getString("email");
+                            nameDisplay.setText(name);
+                            emailDisplay.setText(email);
                         } else {
                             nameDisplay.setText("Unknown User");
                             emailDisplay.setText("No email");
@@ -66,7 +73,16 @@ public class UserProfileActivity extends AppCompatActivity {
                         emailDisplay.setText("Error");
                     });
         }
-        navigation(mAuth);
+
+        ImageView chatBtn = findViewById(R.id.chatButton);
+        chatBtn.setOnClickListener(v -> {
+            if (!email.isEmpty() && !name.isEmpty()) {
+                Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
+                intent.putExtra("receiverName", name);
+                intent.putExtra("receiverEmail", email);
+                startActivity(intent);
+            }
+        });
 
         Button logoutBtn = findViewById(R.id.logoutButton);
         logoutBtn.setOnClickListener(v -> {
@@ -80,6 +96,8 @@ public class UserProfileActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        navigation(mAuth);
     }
 
     private void navigation(FirebaseAuth mAuth){
