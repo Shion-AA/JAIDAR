@@ -1,7 +1,7 @@
 package ph.edu.usc.jaidar;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.ViewHolder> {
+public class YourPostsCompletedAdapter extends RecyclerView.Adapter<YourPostsCompletedAdapter.ViewHolder> {
     private final List<JobPost> postList;
     private final Context context;
 
-    public YourPostsAdapter(Context context, List<JobPost> list) {
+    public YourPostsCompletedAdapter(Context context, List<JobPost> list) {
         this.context = context;
         this.postList = list;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView title, applicantNumber, headcount;
+        TextView title, applicantNumber, headcount, userType;
         RecyclerView applicantList;
 
         public ViewHolder(View view) {
@@ -32,12 +32,13 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.View
             applicantNumber = view.findViewById(R.id.applicant_number);
             headcount = view.findViewById(R.id.headcount);
             applicantList = view.findViewById(R.id.applicant_list);
+            userType = view.findViewById(R.id.user_type);
         }
     }
 
     @NonNull
     @Override
-    public YourPostsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public YourPostsCompletedAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_your_posts, parent, false);
         return new ViewHolder(view);
@@ -45,19 +46,25 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Log.d("MYDEBUG", "postList added: " + postList.get(position).getTitle());
-        Log.d("MYDEBUG", "applicants: " + postList.get(position).getAllApplicant());
-
         JobPost jobPost = postList.get(position);
         holder.title.setText(jobPost.getTitle());
+        holder.title.setOnClickListener(v -> {
+            Intent intent = new Intent(context, JobListingDetailsActivity.class);
+            intent.putExtra("jobRecruitmentId", postList.get(position).getId());
+            intent.putExtra("jobTitle", postList.get(position).getTitle());
+            intent.putExtra("jobSubtitle", "₱" + postList.get(position).getRate() + " • Headcount: " + postList.get(position).getHeadcount());
+            intent.putExtra("about", postList.get(position).getDescription());
+            intent.putExtra("posterUid", postList.get(position).getUserPost());
+            context.startActivity(intent);
+        });
 
-        List<User> applicants = jobPost.getAllApplicant(); // Add this to JobPost model
+        List<User> applicants = jobPost.getAllApplicant();
         int applicantCount = applicants != null ? applicants.size() : 0;
+        holder.userType.setText("worker(s)");
 
         holder.applicantNumber.setText(String.valueOf(applicantCount));
-        holder.headcount.setText(String.valueOf(jobPost.getHeadcount())); // assuming it's in JobPost
+        holder.headcount.setText(String.valueOf(jobPost.getHeadcount()));
 
-        // Set up nested RecyclerView
         ApplicantAdapter adapter = new ApplicantAdapter(this.context, postList.get(position));
         holder.applicantList.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.applicantList.setAdapter(adapter);

@@ -32,7 +32,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     Button logoutBtn;
-    Button TEMPEDITOR, worker;
+    Button hirer, worker;
     Spinner categorySpinner, workerSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selected = categories[position];
-                if (!selected.equals("Choose")) {
+                if (!selected.equals("All")) {
                     Jobpostings(FirebaseFirestore.getInstance(), selected);
                 } else {
                     Jobpostings(FirebaseFirestore.getInstance());
@@ -89,14 +89,14 @@ public class HomePageActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-        //TEMPORARY BUTTON FOR INTENT. DELETE LATER
-        TEMPEDITOR = findViewById(R.id.btnHiring);
-        worker = findViewById(R.id.btnWorker);
-        TEMPEDITOR.setOnClickListener(v -> {
+
+        hirer = findViewById(R.id.btnHiring);
+        hirer.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), RecruitmentEditorActivity.class);
             intent.putExtra(RecruitmentEditorActivity.USER_ROLE, RecruitmentEditorActivity.HIRER); //WORKER or HIRER
             startActivity(intent);
         });
+        worker = findViewById(R.id.btnWorker);
         worker.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), RecruitmentEditorActivity.class);
             intent.putExtra(RecruitmentEditorActivity.USER_ROLE, RecruitmentEditorActivity.WORKER); //WORKER or HIRER
