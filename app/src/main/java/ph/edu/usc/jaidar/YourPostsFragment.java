@@ -2,11 +2,11 @@ package ph.edu.usc.jaidar;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -28,17 +28,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import android.util.Log;
-
 
 public class YourPostsFragment extends Fragment {
 
     private final Context context;
-    private RecyclerView recyclerView;
-    private TextView emptyView;
+    private RecyclerView onGoingListView, completedListView;
+    private TextView emptyOnGoingView, emptyCompletedView;
     private FirebaseFirestore db;
     private List<JobPost> postList;
-    private YourPostsAdapter adapter;
+    private final List<JobPost> onGoingPostList = new ArrayList<>();
+    private final List<JobPost> completedPostList = new ArrayList<>();
+    private YourPostsOnGoingAdapter onGoingAdapter;
+    private YourPostsCompletedAdapter completedAdapter;
     public YourPostsFragment(Context context){
         this.context = context;
     }
@@ -47,30 +48,30 @@ public class YourPostsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_your_posts, container, false);
+        emptyOnGoingView = view.findViewById(R.id.ongoingEmptyMessage);
+        emptyCompletedView = view.findViewById(R.id.completedEmptyMessage);
 
-        recyclerView = view.findViewById(R.id.postList);
-        emptyView = view.findViewById(R.id.empty_post);
+        completedListView = view.findViewById(R.id.completed_post_list);
+        completedListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        completedAdapter = new YourPostsCompletedAdapter(context, completedPostList);
+        completedListView.setAdapter(completedAdapter);
 
-        db = FirebaseFirestore.getInstance();
+        onGoingListView = view.findViewById(R.id.on_going_post_list);
+        onGoingListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        onGoingAdapter = new YourPostsOnGoingAdapter(this, context, onGoingPostList);
+        onGoingListView.setAdapter(onGoingAdapter);
+
         postList = new ArrayList<>();
-        adapter = new YourPostsAdapter(context, postList);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
-
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
+        db = FirebaseFirestore.getInstance();
         db.collection("job_recruitments")
                 .whereEqualTo("user_post", uid)
                 .orderBy("posted_at", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(postSnap -> {
                     if (postSnap.isEmpty()) {
-                        emptyView.setVisibility(View.VISIBLE);
                         return;
                     }
-
-                    emptyView.setVisibility(View.GONE);
 
                     Map<String, JobPost> postMap = new HashMap<>();
                     for (QueryDocumentSnapshot doc : postSnap) {
@@ -164,19 +165,79 @@ public class YourPostsFragment extends Fragment {
                                                     }
 
                                                 }
-
-                                                postList.addAll(postMap.values());
-                                                adapter.notifyDataSetChanged();
+                                                splitAndNotify(postMap);
                                             });
                                 } else {
-                                    // If there are no applicants, just add the posts
-                                    postList.addAll(postMap.values());
-                                    adapter.notifyDataSetChanged();
+                                    splitAndNotify(postMap);
                                 }
                             });
                 });
-
         return view;
+    }
+
+    public void splitAndNotify(Map<String, JobPost> postMap){
+        postList.addAll(postMap.values());
+        onGoingPostList.clear();
+        completedPostList.clear();
+        for (JobPost job : postList) {
+            if (!job.getStatus().isEmpty() && job.getStatus().equals("active")) {
+                onGoingPostList.add(job);
+            } else if (!job.getStatus().isEmpty() && job.getStatus().equals("completed")) {
+                List<User> temp = job.getAllApplicant();
+                if(temp != null){
+                    job.setApplicants(new ArrayList<>());
+                    for(User user : temp){
+                        if("accepted".equals(user.getApplicationStatus())) {
+                            job.addApplicant(user);
+                        }
+                    }
+                }
+                completedPostList.add(job);
+            }
+        }
+        if (onGoingPostList.isEmpty()) {
+            onGoingListView.setVisibility(View.GONE);
+            emptyOnGoingView.setVisibility(View.VISIBLE);
+        } else {
+            emptyOnGoingView.setVisibility(View.GONE);
+            onGoingListView.setVisibility(View.VISIBLE);
+        }
+        if (completedPostList.isEmpty()) {
+            completedListView.setVisibility(View.GONE);
+            emptyCompletedView.setVisibility(View.VISIBLE);
+        } else {
+            emptyCompletedView.setVisibility(View.GONE);
+            completedListView.setVisibility(View.VISIBLE);
+        }
+        onGoingAdapter.notifyDataSetChanged();
+        completedAdapter.notifyDataSetChanged();
+        Log.d("MYDEBUG", "full list: " + postList.size());
+        Log.d("MYDEBUG", "ongoing list: " + onGoingPostList.size());
+        Log.d("MYDEBUG", "complete list: " + completedPostList.size());
+    }
+    public void markPostAsComplete(JobPost job) {
+        job.setStatus("completed");
+
+        onGoingPostList.remove(job);
+
+        completedPostList.add(job);
+
+        if (onGoingPostList.isEmpty()) {
+            onGoingListView.setVisibility(View.GONE);
+            emptyOnGoingView.setVisibility(View.VISIBLE);
+        } else {
+            emptyOnGoingView.setVisibility(View.GONE);
+            onGoingListView.setVisibility(View.VISIBLE);
+        }
+        if (completedPostList.isEmpty()) {
+            completedListView.setVisibility(View.GONE);
+            emptyCompletedView.setVisibility(View.VISIBLE);
+        } else {
+            emptyCompletedView.setVisibility(View.GONE);
+            completedListView.setVisibility(View.VISIBLE);
+        }
+        onGoingAdapter.notifyDataSetChanged();
+        completedAdapter.notifyDataSetChanged();
     }
 
 //    @Override

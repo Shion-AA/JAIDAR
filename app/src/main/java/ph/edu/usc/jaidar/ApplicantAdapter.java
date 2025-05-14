@@ -3,6 +3,7 @@ package ph.edu.usc.jaidar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,100 +77,104 @@ public class ApplicantAdapter extends RecyclerView.Adapter<ApplicantAdapter.View
             context.startActivity(intent);
         });
 
-        String status = applicants.get(position).getApplicationStatus();
-        holder.currentStatus.setText(status);
-        if(status.equals("pending")){
-            // set pending status
-            holder.currentStatus.setText("Pending");
-            holder.currentStatus.setTextColor(Color.BLACK);
+        Log.d("MYDEBUG", "Title: " + job.getTitle() + " | Status: " + job.getStatus());
+        if(!"completed".equals(job.getStatus())) {
+            String status = applicants.get(position).getApplicationStatus();
+            holder.currentStatus.setText(status);
+            Log.d("MYDEBUG", "Name: " + applicants.get(position).getName() + " | Status: " + applicants.get(position).getApplicationStatus());
+            if (status.equals("pending")) {
+                // set pending status
+                holder.currentStatus.setText("Pending");
+                holder.currentStatus.setTextColor(Color.BLACK);
 
-            holder.acceptButton.setVisibility(View.VISIBLE);
-            holder.rejectButton.setVisibility(View.VISIBLE);
-            holder.cancelButton.setVisibility(View.GONE);
+                holder.acceptButton.setVisibility(View.VISIBLE);
+                holder.rejectButton.setVisibility(View.VISIBLE);
+                holder.cancelButton.setVisibility(View.GONE);
 
-            holder.acceptedView.setVisibility(View.GONE);
-            holder.rejectedView.setVisibility(View.GONE);
-        } else if(status.equals("accepted")){
-            //set accepted status
-            holder.currentStatus.setText("Accepted!");
-            holder.currentStatus.setTextColor(Color.GREEN);
+                holder.acceptedView.setVisibility(View.GONE);
+                holder.rejectedView.setVisibility(View.GONE);
+            } else if (status.equals("accepted")) {
+                //set accepted status
+                holder.currentStatus.setText("Accepted!");
+                holder.currentStatus.setTextColor(Color.GREEN);
 
-            holder.acceptButton.setVisibility(View.GONE);
-            holder.rejectButton.setVisibility(View.GONE);
-            holder.cancelButton.setVisibility(View.VISIBLE);
+                holder.acceptButton.setVisibility(View.GONE);
+                holder.rejectButton.setVisibility(View.GONE);
+                holder.cancelButton.setVisibility(View.VISIBLE);
 
-            holder.acceptedView.setVisibility(View.VISIBLE);
-            holder.rejectedView.setVisibility(View.GONE);
-        } else if(status.equals("rejected")){
-            //set rejected status
-            holder.currentStatus.setText("Rejected");
-            holder.currentStatus.setTextColor(Color.RED);
+                holder.acceptedView.setVisibility(View.VISIBLE);
+                holder.rejectedView.setVisibility(View.GONE);
+            } else if (status.equals("rejected")) {
+                //set rejected status
+                holder.currentStatus.setText("Rejected");
+                holder.currentStatus.setTextColor(Color.RED);
 
-            holder.acceptButton.setVisibility(View.GONE);
-            holder.rejectButton.setVisibility(View.GONE);
-            holder.cancelButton.setVisibility(View.GONE);
+                holder.acceptButton.setVisibility(View.GONE);
+                holder.rejectButton.setVisibility(View.GONE);
+                holder.cancelButton.setVisibility(View.GONE);
 
-            holder.acceptedView.setVisibility(View.GONE);
+                holder.acceptedView.setVisibility(View.GONE);
+            }
+
+            holder.acceptButton.setOnClickListener(v -> {
+                db.collection("job_recruitment_apply")
+                        .document(applicants.get(position).getJob_recruitment_apply_id())
+                        .update("status", "accepted")
+                        .addOnSuccessListener(aVoid -> {
+                            //set accepted status
+                            holder.currentStatus.setVisibility(View.GONE);
+
+                            holder.acceptButton.setVisibility(View.GONE);
+                            holder.rejectButton.setVisibility(View.GONE);
+                            holder.cancelButton.setVisibility(View.VISIBLE);
+
+                            holder.acceptedView.setVisibility(View.VISIBLE);
+                            holder.rejectedView.setVisibility(View.GONE);
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+                        });
+            });
+            holder.rejectButton.setOnClickListener(v -> {
+                db.collection("job_recruitment_apply")
+                        .document(applicants.get(position).getJob_recruitment_apply_id())
+                        .update("status", "rejected")
+                        .addOnSuccessListener(aVoid -> {
+                            //set rejected status
+                            holder.currentStatus.setVisibility(View.GONE);
+
+                            holder.acceptButton.setVisibility(View.GONE);
+                            holder.rejectButton.setVisibility(View.GONE);
+                            holder.cancelButton.setVisibility(View.GONE);
+
+                            holder.acceptedView.setVisibility(View.GONE);
+                            holder.rejectedView.setVisibility(View.VISIBLE);
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+                        });
+            });
+            holder.cancelButton.setOnClickListener(v -> {
+                db.collection("job_recruitment_apply")
+                        .document(applicants.get(position).getJob_recruitment_apply_id())
+                        .update("status", "pending")
+                        .addOnSuccessListener(aVoid -> {
+                            // set pending status
+                            holder.currentStatus.setText("Pending");
+                            holder.currentStatus.setVisibility(View.VISIBLE);
+
+                            holder.acceptButton.setVisibility(View.VISIBLE);
+                            holder.rejectButton.setVisibility(View.VISIBLE);
+                            holder.cancelButton.setVisibility(View.GONE);
+
+                            holder.acceptedView.setVisibility(View.GONE);
+                            holder.rejectedView.setVisibility(View.GONE);
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+                        });
+            });
         }
-
-        holder.acceptButton.setOnClickListener(v -> {
-            db.collection("job_recruitment_apply")
-                    .document(applicants.get(position).getJob_recruitment_apply_id())
-                    .update("status", "accepted")
-                    .addOnSuccessListener(aVoid -> {
-                        //set accepted status
-                        holder.currentStatus.setVisibility(View.GONE);
-
-                        holder.acceptButton.setVisibility(View.GONE);
-                        holder.rejectButton.setVisibility(View.GONE);
-                        holder.cancelButton.setVisibility(View.VISIBLE);
-
-                        holder.acceptedView.setVisibility(View.VISIBLE);
-                        holder.rejectedView.setVisibility(View.GONE);
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-                    });
-        });
-        holder.rejectButton.setOnClickListener(v -> {
-            db.collection("job_recruitment_apply")
-                    .document(applicants.get(position).getJob_recruitment_apply_id())
-                    .update("status", "rejected")
-                    .addOnSuccessListener(aVoid -> {
-                        //set rejected status
-                        holder.currentStatus.setVisibility(View.GONE);
-
-                        holder.acceptButton.setVisibility(View.GONE);
-                        holder.rejectButton.setVisibility(View.GONE);
-                        holder.cancelButton.setVisibility(View.GONE);
-
-                        holder.acceptedView.setVisibility(View.GONE);
-                        holder.rejectedView.setVisibility(View.VISIBLE);
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-                    });
-        });
-        holder.cancelButton.setOnClickListener(v -> {
-            db.collection("job_recruitment_apply")
-                    .document(applicants.get(position).getJob_recruitment_apply_id())
-                    .update("status", "pending")
-                    .addOnSuccessListener(aVoid -> {
-                        // set pending status
-                        holder.currentStatus.setText("Pending");
-                        holder.currentStatus.setVisibility(View.VISIBLE);
-
-                        holder.acceptButton.setVisibility(View.VISIBLE);
-                        holder.rejectButton.setVisibility(View.VISIBLE);
-                        holder.cancelButton.setVisibility(View.GONE);
-
-                        holder.acceptedView.setVisibility(View.GONE);
-                        holder.rejectedView.setVisibility(View.GONE);
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-                    });
-        });
     }
 
     @Override
