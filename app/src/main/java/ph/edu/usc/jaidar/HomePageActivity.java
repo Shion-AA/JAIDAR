@@ -33,7 +33,7 @@ public class HomePageActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     Button logoutBtn;
     Button TEMPEDITOR, worker;
-
+    Spinner categorySpinner, workerSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +44,11 @@ public class HomePageActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-        Spinner categorySpinner = findViewById(R.id.categorySpinner);
-        Spinner workerSpinner = findViewById(R.id.workerCategorySpinner);
+        categorySpinner = findViewById(R.id.categorySpinner);
+        workerSpinner = findViewById(R.id.workerCategorySpinner);
 
         String[] categories = { //later on get from db firestore
-                "Choose","Electrician", "Plumber", "Carpenter", "Welding", "Roofer", "Mechanic", "Caretaker", "Ironworker"
+                "All","Electrician", "Plumber", "Carpenter", "Welding", "Roofer", "Mechanic", "Caretaker", "Ironworker"
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -59,18 +59,22 @@ public class HomePageActivity extends AppCompatActivity {
 
         categorySpinner.setAdapter(adapter);
         workerSpinner.setAdapter(adapter);
-
+        workerSort(categories);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selected = categories[position];
-                Toast.makeText(HomePageActivity.this, "Selected: " + selected, Toast.LENGTH_SHORT).show();
+                if (!selected.equals("Choose")) {
+                    Jobpostings(FirebaseFirestore.getInstance(), selected);
+                } else {
+                    Jobpostings(FirebaseFirestore.getInstance());
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
+
 
         // Logout Button
         logoutBtn = findViewById(R.id.logout_button);
@@ -106,42 +110,6 @@ public class HomePageActivity extends AppCompatActivity {
 
     }
 
-    public void Jobpostings(FirebaseFirestore db){
-        RecyclerView jobRecycler = findViewById(R.id.jobPreviewRecycler);
-        jobRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        List<JobPost> jobList = new ArrayList<>();
-        JobPreviewAdapter adapter = new JobPreviewAdapter(this, jobList);
-        jobRecycler.setAdapter(adapter);
-
-        db.collection("job_recruitments")
-//                .orderBy("posted_at", Query.Direction.DESCENDING) // Optional
-                .get()
-                .addOnSuccessListener(query -> {
-                    for (DocumentSnapshot doc : query) {
-                        String id = doc.getId();
-                        String title = doc.getString("title");
-                        String description = doc.getString("description");
-                        Long headcount = doc.getLong("headcount");
-                        Double rate = doc.getDouble("rate");
-                        String userPost = doc.getString("user_post");
-
-                        JobPost job = new JobPost(
-                                id,
-                                title,
-                                description,
-                                headcount != null ? headcount.intValue() : 0,
-                                rate != null ? rate : 0,
-                                userPost
-                        );
-                        jobList.add(job);
-                    }
-                    adapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to load job offers: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
-    }
     public void loadWorkerJobs(FirebaseFirestore db){
         RecyclerView recycler = findViewById(R.id.workerRecyclerView);
         recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -170,7 +138,6 @@ public class HomePageActivity extends AppCompatActivity {
                 });
     }
 
-
     private void Bottomnavigation(FirebaseAuth mAuth) {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.home); // ✅ Always highlight Home in homepage
@@ -198,4 +165,106 @@ public class HomePageActivity extends AppCompatActivity {
             return false;
         });
     }
+
+    private void workerSort(String[] categories){
+        workerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = categories[position];
+                if (!selected.equals("All")) {
+                    loadWorkerJobsFiltered(FirebaseFirestore.getInstance(), selected);
+                } else {
+                    loadWorkerJobs(FirebaseFirestore.getInstance());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+    }
+
+    public void loadWorkerJobsFiltered(FirebaseFirestore db, String tagFilter) {
+        RecyclerView recycler = findViewById(R.id.workerRecyclerView);
+        recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        List<WorkerJob> jobList = new ArrayList<>();
+        WorkerJobAdapter adapter = new WorkerJobAdapter(this, jobList);
+        recycler.setAdapter(adapter);
+
+        db.collection("job_listing")
+                .whereEqualTo("status", "active")
+                .whereEqualTo("tag", tagFilter)
+                .get()
+                .addOnSuccessListener(query -> {
+                    for (DocumentSnapshot doc : query) {
+                        WorkerJob job = new WorkerJob(
+                                doc.getId(),
+                                doc.getString("title"),
+                                doc.getString("description"),
+                                doc.getLong("rate").intValue(),
+                                doc.getString("tag"),
+                                doc.getString("user_post"),
+                                doc.getString("status")
+                        );
+                        jobList.add(job);
+                    }
+                    adapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to filter jobs: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    public void Jobpostings(FirebaseFirestore db) {
+        Jobpostings(db, null); // default: no filter
+    }
+
+    public void Jobpostings(FirebaseFirestore db, String tagFilter) {
+        RecyclerView jobRecycler = findViewById(R.id.jobPreviewRecycler);
+        jobRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        List<JobPost> jobList = new ArrayList<>();
+        JobPreviewAdapter adapter = new JobPreviewAdapter(this, jobList);
+        jobRecycler.setAdapter(adapter);
+
+        // Build base query
+        com.google.firebase.firestore.Query query = db.collection("job_recruitments");
+        if (tagFilter != null && !tagFilter.equals("All")) {
+            query = query.whereEqualTo("tag", tagFilter);
+        }
+
+        query.get()
+                .addOnSuccessListener(querySnap -> {
+                    for (DocumentSnapshot doc : querySnap) {
+                        String id = doc.getId();
+                        String title = doc.getString("title");
+                        String description = doc.getString("description");
+                        Long headcount = doc.getLong("headcount");
+                        String tag = doc.getString("tag");
+                        Double rate = doc.getDouble("rate");
+                        String userPost = doc.getString("user_post");
+                        String status = doc.getString("status");
+
+                        JobPost job = new JobPost(
+                                id,
+                                title,
+                                description,
+                                headcount != null ? headcount.intValue() : 0,
+                                tag,
+                                rate != null ? rate : 0,
+                                userPost,
+                                status
+                        );
+                        jobList.add(job);
+                    }
+                    adapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load job offers: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+
 }
+

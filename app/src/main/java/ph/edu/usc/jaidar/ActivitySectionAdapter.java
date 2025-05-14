@@ -8,8 +8,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class ActivitySectionAdapter extends FragmentStateAdapter {
+    private final FragmentActivity fa;
+
     public ActivitySectionAdapter(@NonNull FragmentActivity fa) {
         super(fa);
+        this.fa = fa;
     }
     @NonNull
     @Override
@@ -18,7 +21,7 @@ public class ActivitySectionAdapter extends FragmentStateAdapter {
         if (position == 0) {
             fragment = new OffersFragment();    //ill make this later
         } else {
-            fragment = new YourPostsFragment();
+            fragment = new YourPostsFragment(fa);
         }
 
         return fragment;

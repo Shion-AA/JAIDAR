@@ -1,5 +1,6 @@
 package ph.edu.usc.jaidar;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +33,15 @@ import android.util.Log;
 
 public class YourPostsFragment extends Fragment {
 
+    private final Context context;
     private RecyclerView recyclerView;
     private TextView emptyView;
     private FirebaseFirestore db;
     private List<JobPost> postList;
     private YourPostsAdapter adapter;
+    public YourPostsFragment(Context context){
+        this.context = context;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -48,14 +53,13 @@ public class YourPostsFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         postList = new ArrayList<>();
-        adapter = new YourPostsAdapter(postList);
+        adapter = new YourPostsAdapter(context, postList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Step 1: Load all posts by this user
         db.collection("job_recruitments")
                 .whereEqualTo("user_post", uid)
                 .orderBy("posted_at", Query.Direction.DESCENDING)
@@ -68,7 +72,6 @@ public class YourPostsFragment extends Fragment {
 
                     emptyView.setVisibility(View.GONE);
 
-                    // Map of postId → JobPost
                     Map<String, JobPost> postMap = new HashMap<>();
                     for (QueryDocumentSnapshot doc : postSnap) {
                         JobPost jp = new JobPost(
@@ -76,8 +79,10 @@ public class YourPostsFragment extends Fragment {
                                 doc.getString("title"),
                                 doc.getString("description"),
                                 doc.getLong("headcount").intValue(),
+                                doc.getString("tag"),
                                 doc.getDouble("rate"),
-                                doc.getString("user_post")
+                                doc.getString("user_post"),
+                                doc.getString("status")
                         );
                         postMap.put(doc.getId(), jp);
                     }
@@ -88,16 +93,24 @@ public class YourPostsFragment extends Fragment {
                             .get()
                             .addOnSuccessListener(applySnap -> {
                                 Map<String, List<String>> postToApplicants = new HashMap<>();
+                                Map<String, String> userStatusMap = new HashMap<>();
+                                Map<String, String> userToApplyMap = new HashMap<>();
                                 for (QueryDocumentSnapshot applyDoc : applySnap) {
+                                    String applyId = applyDoc.getId();
                                     String postId = applyDoc.getString("job_recruitment");
                                     String userId = applyDoc.getString("apply_user");
+                                    String status = applyDoc.getString("status");
 
                                     if (postId != null && userId != null) {
                                         postToApplicants
                                                 .computeIfAbsent(postId, k -> new ArrayList<>())
                                                 .add(userId);
+                                        String key = postId + "_" + userId;
+                                        userStatusMap.put(key, status);
+                                        userToApplyMap.put(key, applyId);
                                     }
                                 }
+
 
                                 // Step 3: Batch-fetch user details for all applicants
                                 Set<String> allUserIds = new HashSet<>();
@@ -119,26 +132,39 @@ public class YourPostsFragment extends Fragment {
                                                     DocumentSnapshot userDoc = (DocumentSnapshot) result;
                                                     User user = userDoc.toObject(User.class);
                                                     if (user != null) {
-                                                        user.setUid(userDoc.getId());
+                                                        String userid = userDoc.getId();
+                                                        user.setUid(userid);
+
                                                         users.put(user.getUid(), user);
                                                     }
                                                 }
 
                                                 // Step 4: Assign applicants to job posts
                                                 for (Map.Entry<String, List<String>> entry : postToApplicants.entrySet()) {
-                                                    JobPost jp = postMap.get(entry.getKey());
+                                                    String postId = entry.getKey();
+                                                    JobPost jp  = postMap.get(postId);
                                                     jp.setApplicants(new ArrayList<>());
-                                                    if (jp != null) {
-                                                        for (String userId : entry.getValue()) {
-                                                            User applicant = users.get(userId);
-                                                            if (applicant != null) {
-                                                                jp.addApplicant(applicant);
-                                                            }
-                                                        }
+
+                                                    for (String userId : entry.getValue()) {
+                                                        User originalUser = users.get(userId);
+                                                        if (originalUser == null) continue;
+
+                                                        String key = postId + "_" + userId;
+
+                                                        // Create a fresh copy for this job post
+                                                        User applicant = new User();
+                                                        applicant.setUid(originalUser.getUid());
+                                                        applicant.setName(originalUser.getName());
+                                                        applicant.setEmail(originalUser.getEmail());
+                                                        applicant.setLocation(originalUser.getLocation());
+                                                        applicant.setApplicationStatus(userStatusMap.get(key));
+                                                        applicant.setJob_recruitment_apply_id(userToApplyMap.get(key));
+
+                                                        jp.addApplicant(applicant);
                                                     }
+
                                                 }
 
-                                                // Add the posts with applicants to the list
                                                 postList.addAll(postMap.values());
                                                 adapter.notifyDataSetChanged();
                                             });
