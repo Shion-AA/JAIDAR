@@ -98,7 +98,6 @@ public class ChatActivity extends AppCompatActivity {
         msgData.put("receiver", receiverEmail);
         msgData.put("message", message);
         msgData.put("timestamp", System.currentTimeMillis());
-
         chatRef.add(msgData)
                 .addOnSuccessListener(documentReference -> messageEditText.setText(""))
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to send", Toast.LENGTH_SHORT).show());
