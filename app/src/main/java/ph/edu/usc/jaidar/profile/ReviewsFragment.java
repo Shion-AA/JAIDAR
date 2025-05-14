@@ -1,4 +1,4 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ph.edu.usc.jaidar.R;
+
 public class ReviewsFragment extends Fragment {
 
     private RecyclerView recyclerView;
@@ -30,10 +32,10 @@ public class ReviewsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_reviews, container, false);
+        View view = inflater.inflate(ph.edu.usc.jaidar.R.layout.fragment_reviews, container, false);
 
-        recyclerView = view.findViewById(R.id.reviewList);
-        writeReviewBtn = view.findViewById(R.id.writeReviewBtn);
+        recyclerView = view.findViewById(ph.edu.usc.jaidar.R.id.reviewList);
+        writeReviewBtn = view.findViewById(ph.edu.usc.jaidar.R.id.writeReviewBtn);
 
         db = FirebaseFirestore.getInstance();
         reviewList = new ArrayList<>();
@@ -75,8 +77,8 @@ public class ReviewsFragment extends Fragment {
     }
 
     private void showReviewDialog() {
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_write_review, null);
-        EditText commentInput = dialogView.findViewById(R.id.commentInput);
+        View dialogView = LayoutInflater.from(getContext()).inflate(ph.edu.usc.jaidar.R.layout.dialog_write_review, null);
+        EditText commentInput = dialogView.findViewById(ph.edu.usc.jaidar.R.id.commentInput);
         RatingBar ratingBar = dialogView.findViewById(R.id.ratingBarInput);
 
         new AlertDialog.Builder(getContext())

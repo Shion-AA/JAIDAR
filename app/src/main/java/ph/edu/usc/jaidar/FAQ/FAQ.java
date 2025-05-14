@@ -1,21 +1,15 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.FAQ;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-    public class FAQ extends AppCompatActivity {
+import ph.edu.usc.jaidar.R;
+
+public class FAQ extends AppCompatActivity {
 
         private ListView listViewFAQ;
         private FAQAdapter faqAdapter;

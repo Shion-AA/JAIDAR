@@ -19,19 +19,19 @@
             android:name=".worker.WorkerDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".messaging.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".UserListActivity"
+            android:name=".messaging.UserListActivity"
             android:exported="false" />
         <activity
             android:name=".ActivitySectionActivity"
             android:exported="false" />
         <activity
-            android:name=".ReviewsFragment"
+            android:name=".profile.ReviewsFragment"
             android:exported="false" />
         <activity
-            android:name=".AboutFragment"
+            android:name=".profile.AboutFragment"
             android:exported="false" />
         <activity
             android:name=".RecruitmentViewActivity"
@@ -40,7 +40,7 @@
             android:name=".RecruitmentEditorActivity"
             android:exported="false" />
         <activity
-            android:name=".FAQAnswer"
+            android:name=".FAQ.FAQAnswer"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".profile.UserProfileActivity"
             android:exported="false" />
         <activity
             android:name=".HomePageActivity"
@@ -70,7 +70,7 @@
             android:name=".LandingPageActivity"
             android:exported="false" />
         <activity
-            android:name=".FAQ"
+            android:name=".FAQ.FAQ"
             android:exported="false" />
     </application>
 
