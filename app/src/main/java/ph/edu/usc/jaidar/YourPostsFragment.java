@@ -60,7 +60,6 @@ public class YourPostsFragment extends Fragment {
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Step 1: Load all posts by this user
         db.collection("job_recruitments")
                 .whereEqualTo("user_post", uid)
                 .orderBy("posted_at", Query.Direction.DESCENDING)
@@ -73,7 +72,6 @@ public class YourPostsFragment extends Fragment {
 
                     emptyView.setVisibility(View.GONE);
 
-                    // Map of postId → JobPost
                     Map<String, JobPost> postMap = new HashMap<>();
                     for (QueryDocumentSnapshot doc : postSnap) {
                         JobPost jp = new JobPost(
@@ -107,8 +105,9 @@ public class YourPostsFragment extends Fragment {
                                         postToApplicants
                                                 .computeIfAbsent(postId, k -> new ArrayList<>())
                                                 .add(userId);
-                                        userStatusMap.put(userId, status);
-                                        userToApplyMap.put(userId, applyId);
+                                        String key = postId + "_" + userId;
+                                        userStatusMap.put(key, status);
+                                        userToApplyMap.put(key, applyId);
                                     }
                                 }
 
@@ -135,27 +134,29 @@ public class YourPostsFragment extends Fragment {
                                                     if (user != null) {
                                                         String userid = userDoc.getId();
                                                         user.setUid(userid);
-                                                        user.setApplicationStatus(userStatusMap.get(userid));
-                                                        user.setJob_recruitment_apply_id(userToApplyMap.get(userid));
+
                                                         users.put(user.getUid(), user);
                                                     }
                                                 }
 
                                                 // Step 4: Assign applicants to job posts
                                                 for (Map.Entry<String, List<String>> entry : postToApplicants.entrySet()) {
-                                                    JobPost jp = postMap.get(entry.getKey());
+                                                    String postId = entry.getKey();
+                                                    JobPost jp  = postMap.get(postId);
                                                     jp.setApplicants(new ArrayList<>());
-                                                    if (jp != null) {
-                                                        for (String userId : entry.getValue()) {
-                                                            User applicant = users.get(userId);
-                                                            if (applicant != null) {
-                                                                jp.addApplicant(applicant);
-                                                            }
-                                                        }
+
+                                                    for (String userId : entry.getValue()) {
+                                                        User applicant = users.get(userId);
+                                                        if (applicant == null) continue;
+
+                                                        String key = postId + "_" + userId;
+                                                        applicant.setApplicationStatus(userStatusMap.get(key));
+                                                        applicant.setJob_recruitment_apply_id(userToApplyMap.get(key));
+
+                                                        jp.addApplicant(applicant);
                                                     }
                                                 }
 
-                                                // Add the posts with applicants to the list
                                                 postList.addAll(postMap.values());
                                                 adapter.notifyDataSetChanged();
                                             });

@@ -5,13 +5,39 @@
     android:background="#EFEFEF"
     android:layout_marginBottom="8dp">
 
-    <TextView
-        android:id="@+id/title"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:padding="8dp" />
+        android:gravity="center_vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/begin_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Begin Task"
+            android:backgroundTint="#4CAF50"
+            android:visibility="gone"
+            />
+        <Button
+            android:id="@+id/complete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Complete Task"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FF9900"
+            android:visibility="gone"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"

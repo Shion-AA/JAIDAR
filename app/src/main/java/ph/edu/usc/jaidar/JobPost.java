@@ -24,7 +24,7 @@ public class JobPost {
         this.tag = tag;
         this.rate = rate;
         this.userPost = userPost;
-        this.status = status;
+        this.status = status;   //active, completed,
     }
 
     public String getId() { return id; }

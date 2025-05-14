@@ -46,6 +46,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.d("MYDEBUG", "postList added: " + postList.get(position).getTitle());
+        Log.d("MYDEBUG", "applicants: " + postList.get(position).getAllApplicant());
 
         JobPost jobPost = postList.get(position);
         holder.title.setText(jobPost.getTitle());
