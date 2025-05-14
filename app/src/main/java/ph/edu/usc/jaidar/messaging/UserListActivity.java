@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,9 +18,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
+import ph.edu.usc.jaidar.ActivitySectionActivity;
+import ph.edu.usc.jaidar.HomePageActivity;
 import ph.edu.usc.jaidar.R;
 import ph.edu.usc.jaidar.UserAdapter;
 import ph.edu.usc.jaidar.UserModel;
+import ph.edu.usc.jaidar.profile.UserProfileActivity;
 
 public class UserListActivity extends AppCompatActivity implements UserAdapter.OnUserClickListener {
 
@@ -47,6 +51,32 @@ public class UserListActivity extends AppCompatActivity implements UserAdapter.O
         db = FirebaseFirestore.getInstance();
 
         loadUsers();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.activity);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                startActivity(new Intent(this, HomePageActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if(id == R.id.activity){
+                startActivity(new Intent(this, ActivitySectionActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (id == R.id.message) {
+
+                return true;
+            } else if (id == R.id.profile) {
+                String currentUid = mAuth.getUid();
+                Intent intent = new Intent(UserListActivity.this, UserProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("profileUid", currentUid);
+                startActivity(intent);
+                return true;
+            }
+            return false;
+        });
     }
 
     private void loadUsers() {

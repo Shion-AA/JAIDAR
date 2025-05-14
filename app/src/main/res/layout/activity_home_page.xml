@@ -166,12 +166,7 @@
                 android:layout_marginBottom="16dp"
                 android:orientation="horizontal" />
 
-            <!-- Action Buttons -->
-            <Button
-                android:id="@+id/logout_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Logout" />
+
 
 <!--            <Button-->
 <!--                android:id="@+id/TEMP_EDITOR"-->
