@@ -45,6 +45,7 @@ public class HomePageActivity extends AppCompatActivity {
 
 
         Spinner categorySpinner = findViewById(R.id.categorySpinner);
+        Spinner workerSpinner = findViewById(R.id.workerCategorySpinner);
 
         String[] categories = { //later on get from db firestore
                 "Choose","Electrician", "Plumber", "Carpenter", "Welding", "Roofer", "Mechanic", "Caretaker", "Ironworker"
@@ -57,6 +58,7 @@ public class HomePageActivity extends AppCompatActivity {
         );
 
         categorySpinner.setAdapter(adapter);
+        workerSpinner.setAdapter(adapter);
 
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
