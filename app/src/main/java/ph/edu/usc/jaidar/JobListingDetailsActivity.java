@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -98,11 +99,11 @@ public class JobListingDetailsActivity extends AppCompatActivity {
         db.collection("job_recruitment_apply")
             .whereEqualTo("job_recruitment", jobRecruitmentId)
             .whereEqualTo("apply_user", userId)
-            .whereEqualTo("status", "pending")
             .get()
             .addOnSuccessListener(snapshot -> {
                 if(!snapshot.isEmpty()){
-                    applyBtn.setText("Applied!");
+                    DocumentSnapshot doc = snapshot.getDocuments().get(0); // get first matching document
+                    applyBtn.setText(doc.getString("status"));
                     applyBtn.setEnabled(false);
                 } else {
                     applyBtn.setText("Apply");
@@ -155,7 +156,7 @@ public class JobListingDetailsActivity extends AppCompatActivity {
         Map<String, Object> application = new HashMap<>();
         application.put("apply_user", userId);
         application.put("job_recruitment", jobRecruitmentId);
-        application.put("status", "active");
+        application.put("status", "pending");
         application.put("applied_at", FieldValue.serverTimestamp());
 
         db.collection("job_recruitment_apply")
