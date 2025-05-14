@@ -19,7 +19,7 @@ public class ActivitySectionAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         Fragment fragment;
         if (position == 0) {
-            fragment = new OffersFragment();    //ill make this later
+            fragment = new OffersFragment(fa);    //ill make this later
         } else {
             fragment = new YourPostsFragment(fa);
         }
