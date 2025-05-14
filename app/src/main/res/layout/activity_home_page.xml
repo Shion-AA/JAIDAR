@@ -86,112 +86,37 @@
                     android:textColor="#ffffff" />
             </LinearLayout>
 
-            <!-- Category Section -->
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="Select Category"
-                android:textColor="#5742BF"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <!-- Category Buttons Group 1 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCategoryElectrician"
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/button_gradient"
-                    android:text="Electrician"
+                    android:layout_height="wrap_content"
+                    android:text="Select Category:"
                     android:textColor="#5742BF"
-                    android:textAllCaps="false" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="12dp" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCategoryPlumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/button_gradient"
-                    android:text="Plumber"
-                    android:textColor="#5742BF"
-                    android:textAllCaps="false" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCategoryCarpenter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/button_gradient"
-                    android:text="Carpenter"
-                    android:textColor="#5742BF"
-                    android:textAllCaps="false" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCategoryWelding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/button_gradient"
-                    android:text="Welding"
-                    android:textColor="#5742BF"
-                    android:textAllCaps="false" />
+                <Spinner
+                    android:id="@+id/categorySpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/spinner_background"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="36dp"
+                    android:popupBackground="@android:color/white"
+                    android:dropDownVerticalOffset="8dp"
+                    android:dropDownHorizontalOffset="0dp" />
             </LinearLayout>
 
-            <!-- Category Buttons Group 2 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCategoryRoofer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/button_gradient"
-                    android:text="Roofer"
-                    android:textColor="#5742BF"
-                    android:textAllCaps="false" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCategoryMechanic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/button_gradient"
-                    android:text="Mechanic"
-                    android:textColor="#5742BF"
-                    android:textAllCaps="false" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCategoryCaretaker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/button_gradient"
-                    android:text="Caretaker"
-                    android:textColor="#5742BF"
-                    android:textAllCaps="false" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCategoryIronworker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/button_gradient"
-                    android:text="Ironworker"
-                    android:textColor="#5742BF"
-                    android:textAllCaps="false" />
-            </LinearLayout>
             <TextView
                 android:id="@+id/jobsHeader"
                 android:layout_width="wrap_content"
@@ -219,17 +144,17 @@
                 android:layout_height="wrap_content"
                 android:text="Logout" />
 
-            <Button
-                android:id="@+id/TEMP_EDITOR"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="EDITOR" />
+<!--            <Button-->
+<!--                android:id="@+id/TEMP_EDITOR"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="EDITOR" />-->
 
-            <Button
-                android:id="@+id/TEMP_VIEW"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="VIEW" />
+<!--            <Button-->
+<!--                android:id="@+id/TEMP_VIEW"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="VIEW" />-->
         </LinearLayout>
     </ScrollView>
 
