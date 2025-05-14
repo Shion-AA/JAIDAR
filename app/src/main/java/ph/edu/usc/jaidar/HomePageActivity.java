@@ -229,7 +229,7 @@ public class HomePageActivity extends AppCompatActivity {
         jobRecycler.setAdapter(adapter);
 
         // Build base query
-        com.google.firebase.firestore.Query query = db.collection("job_recruitments");
+        com.google.firebase.firestore.Query query = db.collection("job_recruitments").whereEqualTo("status", "active");
         if (tagFilter != null && !tagFilter.equals("All")) {
             query = query.whereEqualTo("tag", tagFilter);
         }

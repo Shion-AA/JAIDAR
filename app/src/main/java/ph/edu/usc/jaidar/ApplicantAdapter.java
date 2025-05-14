@@ -3,6 +3,7 @@ package ph.edu.usc.jaidar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,12 +77,11 @@ public class ApplicantAdapter extends RecyclerView.Adapter<ApplicantAdapter.View
             context.startActivity(intent);
         });
 
-        if("completed".equals(job.getStatus())) {
-
-        } else {
-
+        Log.d("MYDEBUG", "Title: " + job.getTitle() + " | Status: " + job.getStatus());
+        if(!"completed".equals(job.getStatus())) {
             String status = applicants.get(position).getApplicationStatus();
             holder.currentStatus.setText(status);
+            Log.d("MYDEBUG", "Name: " + applicants.get(position).getName() + " | Status: " + applicants.get(position).getApplicationStatus());
             if (status.equals("pending")) {
                 // set pending status
                 holder.currentStatus.setText("Pending");
