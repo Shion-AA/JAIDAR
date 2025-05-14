@@ -18,12 +18,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import ph.edu.usc.jaidar.messaging.UserListActivity;
+import ph.edu.usc.jaidar.profile.UserProfileActivity;
+
 public class ActivitySectionActivity extends AppCompatActivity {
+
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_section);
-
+        mAuth = FirebaseAuth.getInstance();
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager = findViewById(R.id.viewPager);
 
@@ -46,13 +52,18 @@ public class ActivitySectionActivity extends AppCompatActivity {
             } else if(id == R.id.activity){
 
                 return true;
-//            } else if (id == R.id.message) {
-//                startActivity(new Intent(this, MessageActivity.class));
-//                overridePendingTransition(0, 0);
-//                return true;
-            } else if (id == R.id.profile) {
+            } else if (id == R.id.message) {
+                startActivity(new Intent(this, UserListActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
-            }
+            } else if (id == R.id.profile) {
+                    String currentUid = mAuth.getUid();
+                    Intent intent = new Intent(ActivitySectionActivity.this, UserProfileActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("profileUid", currentUid);
+                    startActivity(intent);
+                    return true;
+                }
             return false;
         });
 

@@ -75,21 +75,6 @@ public class HomePageActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-
-        // Logout Button
-        logoutBtn = findViewById(R.id.logout_button);
-        logoutBtn.setOnClickListener(v -> {
-            mAuth.signOut();
-            SharedPreferences sharedPreferences = getSharedPreferences("userpref", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
-
-            Intent intent = new Intent(getApplicationContext(), LandingPageActivity.class);
-            startActivity(intent);
-            finish();
-        });
-
         hirer = findViewById(R.id.btnHiring);
         hirer.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), RecruitmentEditorActivity.class);
