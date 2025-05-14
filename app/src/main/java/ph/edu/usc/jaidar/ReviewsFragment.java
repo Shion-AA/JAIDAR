@@ -76,7 +76,6 @@ public class ReviewsFragment extends Fragment {
 
     private void showReviewDialog() {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_write_review, null);
-        EditText nameInput = dialogView.findViewById(R.id.reviewerNameInput);
         EditText commentInput = dialogView.findViewById(R.id.commentInput);
         RatingBar ratingBar = dialogView.findViewById(R.id.ratingBarInput);
 
@@ -84,29 +83,37 @@ public class ReviewsFragment extends Fragment {
                 .setTitle("Write a Review")
                 .setView(dialogView)
                 .setPositiveButton("Submit", (dialog, which) -> {
-                    String name = nameInput.getText().toString().trim();
+
                     String comment = commentInput.getText().toString().trim();
                     float rating = ratingBar.getRating();
 
-                    if (name.isEmpty() || comment.isEmpty() || rating == 0f) {
+                    if (comment.isEmpty() || rating == 0f) {
                         Toast.makeText(getContext(), "All fields required", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    db.collection("users").document(currentUid).get()
+                            .addOnSuccessListener(snapshot -> {
+                                String name = snapshot.getString("name");
+                                if (name == null) name = "Anonymous";
 
-                    Map<String, Object> review = new HashMap<>();
-                    review.put("reviewerName", name);
-                    review.put("comment", comment);
-                    review.put("rating", rating);
-                    review.put("timestamp", FieldValue.serverTimestamp());
+                                Map<String, Object> review = new HashMap<>();
+                                review.put("reviewerName", name);
+                                review.put("comment", comment);
+                                review.put("rating", rating);
+                                review.put("timestamp", FieldValue.serverTimestamp());
 
-                    db.collection("users").document(profileUid)
-                            .collection("reviews").add(review)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(getContext(), "Review submitted!", Toast.LENGTH_SHORT).show();
-                                loadReviews();
+                                db.collection("users").document(profileUid)
+                                        .collection("reviews").add(review)
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(getContext(), "Review submitted!", Toast.LENGTH_SHORT).show();
+                                            loadReviews();
+                                        })
+                                        .addOnFailureListener(e ->
+                                                Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                        );
                             })
                             .addOnFailureListener(e ->
-                                    Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(getContext(), "Failed to load your profile", Toast.LENGTH_SHORT).show()
                             );
                 })
                 .setNegativeButton("Cancel", null)

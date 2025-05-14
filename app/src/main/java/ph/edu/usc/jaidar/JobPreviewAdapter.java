@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.List;
 
 public class JobPreviewAdapter extends RecyclerView.Adapter<JobPreviewAdapter.ViewHolder> {
@@ -30,7 +32,7 @@ public class JobPreviewAdapter extends RecyclerView.Adapter<JobPreviewAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.jobTitle);
-            subtitle = itemView.findViewById(R.id.jobSubtitle);
+            subtitle = itemView.findViewById(R.id.name);
             icon = itemView.findViewById(R.id.jobIcon);
         }
     }
@@ -47,7 +49,18 @@ public class JobPreviewAdapter extends RecyclerView.Adapter<JobPreviewAdapter.Vi
         JobPost job = jobList.get(position);
         holder.title.setText(job.getTitle());
 
-        // On click, open details activity
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(job.getUserPost())
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    String name = snapshot.getString("name");
+                    holder.subtitle.setText(name != null ? name : "Unknown");
+                })
+                .addOnFailureListener(e -> {
+                    holder.subtitle.setText("Error");
+                });
+
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, JobListingDetailsActivity.class);
             intent.putExtra("jobRecruitmentId", job.getId());
@@ -57,8 +70,8 @@ public class JobPreviewAdapter extends RecyclerView.Adapter<JobPreviewAdapter.Vi
             intent.putExtra("posterUid", job.getUserPost());
             context.startActivity(intent);
         });
-
     }
+
 
     @Override
     public int getItemCount() {

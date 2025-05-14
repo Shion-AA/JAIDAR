@@ -47,24 +47,42 @@ public class UserProfileActivity extends AppCompatActivity {
 
         nameDisplay = findViewById(R.id.nameDisplay);
         emailDisplay = findViewById(R.id.emailDisplay);
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            emailDisplay.setText(user.getEmail());
-
-            db.collection("users").document(user.getUid()).get()
+        if (profileUid != null) {
+            db.collection("users").document(profileUid).get()
                     .addOnSuccessListener(snapshot -> {
                         if (snapshot.exists()) {
                             nameDisplay.setText(snapshot.getString("name"));
+                            emailDisplay.setText(snapshot.getString("email")); // use Firestore email
+                        } else {
+                            nameDisplay.setText("Unknown User");
+                            emailDisplay.setText("No email");
                         }
+                    })
+                    .addOnFailureListener(e -> {
+                        nameDisplay.setText("Error loading user");
+                        emailDisplay.setText("Error");
                     });
         }
+        navigation(mAuth);
+
+    }
+
+    private void navigation(FirebaseAuth mAuth){
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.profile);
+        String currentUid = mAuth.getUid();
+        if (currentUid != null && currentUid.equals(profileUid)) {
+            bottomNavigationView.setSelectedItemId(R.id.profile);
+        }
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
+
             if (id == R.id.home) {
                 startActivity(new Intent(this, HomePageActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (id == R.id.activity) {
+                startActivity(new Intent(this, ActivitySectionActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
 //            } else if (id == R.id.message) {
@@ -72,10 +90,15 @@ public class UserProfileActivity extends AppCompatActivity {
 //                overridePendingTransition(0, 0);
 //                return true;
             } else if (id == R.id.profile) {
+                Intent intent = new Intent(this, UserProfileActivity.class);
+                intent.putExtra("profileUid", currentUid);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
                 return true;
             }
+
             return false;
         });
-
     }
 }

@@ -36,25 +36,34 @@ public class AboutFragment extends Fragment {
         saveBtn = view.findViewById(R.id.saveBtn);
 
         setEditingEnabled(false);
-
         db = FirebaseFirestore.getInstance();
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        uid = getArguments().getString("profileUid");
+        String currentUid = FirebaseAuth.getInstance().getUid();
+        boolean isOwner = uid.equals(currentUid);
 
         loadUserData();
 
-        editBtn.setOnClickListener(v -> {
-            setEditingEnabled(true);
-            saveBtn.setVisibility(View.VISIBLE);
-        });
+        if (isOwner) {
+            editBtn.setVisibility(View.VISIBLE);
+            editBtn.setOnClickListener(v -> {
+                setEditingEnabled(true);
+                saveBtn.setVisibility(View.VISIBLE);
+            });
 
-        saveBtn.setOnClickListener(v -> {
-            saveUserData();
-            setEditingEnabled(false);
+            saveBtn.setOnClickListener(v -> {
+                saveUserData();
+                setEditingEnabled(false);
+                saveBtn.setVisibility(View.GONE);
+            });
+        } else {
+            editBtn.setVisibility(View.GONE);
             saveBtn.setVisibility(View.GONE);
-        });
+        }
 
         return view;
     }
+
 
     private void loadUserData() {
         db.collection("users").document(uid).get()

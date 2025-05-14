@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +40,36 @@ public class HomePageActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+
+        Spinner categorySpinner = findViewById(R.id.categorySpinner);
+
+        String[] categories = { //later on get from db firestore
+                "Choose","Electrician", "Plumber", "Carpenter", "Welding",
+                "Roofer", "Mechanic", "Caretaker", "Ironworker","Electrician", "Plumber", "Carpenter", "Welding",
+                "Roofer", "Mechanic", "Caretaker","Electrician", "Plumber", "Carpenter", "Welding",
+                "Roofer", "Mechanic", "Caretaker","Electrician", "Plumber", "Carpenter", "Welding",
+                "Roofer", "Mechanic", "Caretaker"
+        };
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                categories
+        );
+
+        categorySpinner.setAdapter(adapter);
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = categories[position];
+                Toast.makeText(HomePageActivity.this, "Selected: " + selected, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 //        String uid = mAuth.getCurrentUser().getUid();
 //        TextView nameTextView = findViewById(R.id.name);
 //        db.collection("users").document(uid).get()
@@ -65,20 +99,21 @@ public class HomePageActivity extends AppCompatActivity {
             finish();
         });
         //TEMPORARY BUTTON FOR INTENT. DELETE LATER
-        TEMPEDITOR = findViewById(R.id.TEMP_EDITOR);
+        TEMPEDITOR = findViewById(R.id.btnHiring);
         TEMPEDITOR.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), RecruitmentEditorActivity.class);
+            intent.putExtra(RecruitmentEditorActivity.USER_ROLE, RecruitmentEditorActivity.HIRER); //WORKER or HIRER
             startActivity(intent);
         });
-        TEMPVIEW = findViewById(R.id.TEMP_VIEW);
-        TEMPVIEW.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), RecruitmentViewActivity.class);
-            startActivity(intent);
-        });
+//        TEMPVIEW = findViewById(R.id.TEMP_VIEW);
+//        TEMPVIEW.setOnClickListener(v -> {
+//            Intent intent = new Intent(getApplicationContext(), RecruitmentViewActivity.class);
+//            startActivity(intent);
+//        });
         //END TEMPORARY INTENT
 
 
-        Bottomnavigation();
+        Bottomnavigation(mAuth);
         Jobpostings(db);
 
     }
@@ -119,31 +154,26 @@ public class HomePageActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to load job offers: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
-    private void Bottomnavigation(){
-        // Bottom Navigation
+    private void Bottomnavigation(FirebaseAuth mAuth) {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.home); // Highlight Home icon
+        bottomNavigationView.setSelectedItemId(R.id.home); // ✅ Always highlight Home in homepage
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
 
             if (id == R.id.home) {
-                // Already on Home - do nothing
+                return true; // already here
+            } else if (id == R.id.activity) {
+                startActivity(new Intent(HomePageActivity.this, ActivitySectionActivity.class));
                 return true;
-            } else if (id == R.id.activity){
-                Intent intent = new Intent(HomePageActivity.this, ActivitySectionActivity.class);
-                startActivity(intent);
-                return true;
-            }
-            else if (id == R.id.message) {
+            } else if (id == R.id.message) {
                 startActivity(new Intent(HomePageActivity.this, UserListActivity.class));
-                return true;
-            }
-            else if (id == R.id.profile) {
-                String currentUid = mAuth.getCurrentUser().getUid();
+                return true;       
+            } else if (id == R.id.profile) {
+                String currentUid = mAuth.getUid();
                 Intent intent = new Intent(HomePageActivity.this, UserProfileActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("profileUid", currentUid); // ✅ Pass UID
+                intent.putExtra("profileUid", currentUid);
                 startActivity(intent);
                 return true;
             }
