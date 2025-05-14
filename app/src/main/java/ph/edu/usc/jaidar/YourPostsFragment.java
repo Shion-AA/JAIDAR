@@ -146,15 +146,23 @@ public class YourPostsFragment extends Fragment {
                                                     jp.setApplicants(new ArrayList<>());
 
                                                     for (String userId : entry.getValue()) {
-                                                        User applicant = users.get(userId);
-                                                        if (applicant == null) continue;
+                                                        User originalUser = users.get(userId);
+                                                        if (originalUser == null) continue;
 
                                                         String key = postId + "_" + userId;
+
+                                                        // Create a fresh copy for this job post
+                                                        User applicant = new User();
+                                                        applicant.setUid(originalUser.getUid());
+                                                        applicant.setName(originalUser.getName());
+                                                        applicant.setEmail(originalUser.getEmail());
+                                                        applicant.setLocation(originalUser.getLocation());
                                                         applicant.setApplicationStatus(userStatusMap.get(key));
                                                         applicant.setJob_recruitment_apply_id(userToApplyMap.get(key));
 
                                                         jp.addApplicant(applicant);
                                                     }
+
                                                 }
 
                                                 postList.addAll(postMap.values());
