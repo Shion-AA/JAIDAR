@@ -29,7 +29,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     Button logoutBtn;
-    Button TEMPEDITOR, TEMPVIEW;
+    Button TEMPEDITOR, TEMPVIEW, worker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +100,15 @@ public class HomePageActivity extends AppCompatActivity {
         });
         //TEMPORARY BUTTON FOR INTENT. DELETE LATER
         TEMPEDITOR = findViewById(R.id.btnHiring);
+        worker = findViewById(R.id.btnWorker);
         TEMPEDITOR.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), RecruitmentEditorActivity.class);
             intent.putExtra(RecruitmentEditorActivity.USER_ROLE, RecruitmentEditorActivity.HIRER); //WORKER or HIRER
+            startActivity(intent);
+        });
+        worker.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), RecruitmentEditorActivity.class);
+            intent.putExtra(RecruitmentEditorActivity.USER_ROLE, RecruitmentEditorActivity.WORKER); //WORKER or HIRER
             startActivity(intent);
         });
 //        TEMPVIEW = findViewById(R.id.TEMP_VIEW);
