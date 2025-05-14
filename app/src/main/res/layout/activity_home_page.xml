@@ -88,17 +88,18 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
                 <TextView
+                    android:id="@+id/jobsHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Select Category:"
-                    android:textColor="#5742BF"
-                    android:textSize="16sp"
+                    android:text="Recent Opportunities"
+                    android:textSize="18sp"
                     android:textStyle="bold"
+                    android:textColor="#4B0082"
                     android:layout_marginEnd="12dp" />
 
                 <Spinner
@@ -112,19 +113,9 @@
                     android:popupBackground="@android:color/white"
                     android:dropDownVerticalOffset="8dp"
                     android:dropDownHorizontalOffset="0dp" />
+
             </LinearLayout>
 
-
-
-            <TextView
-                android:id="@+id/jobsHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recent Opportunities"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#4B0082"
-                android:layout_marginTop="16dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/jobPreviewRecycler"
@@ -135,6 +126,45 @@
                 android:orientation="horizontal" />
 
 
+            <LinearLayout
+                android:id="@+id/jobListingsHeaderRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/jobListingsHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Browse Job Listings:"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#4B0082"
+                    android:layout_marginEnd="12dp" />
+
+                <Spinner
+                    android:id="@+id/workerCategorySpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/spinner_background"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="36dp"
+                    android:popupBackground="@android:color/white"
+                    android:dropDownVerticalOffset="8dp"
+                    android:dropDownHorizontalOffset="0dp" />
+            </LinearLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/workerRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal" />
 
             <!-- Action Buttons -->
             <Button

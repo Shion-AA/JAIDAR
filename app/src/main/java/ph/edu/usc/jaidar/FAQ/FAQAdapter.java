@@ -1,4 +1,4 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.FAQ;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
+
+import ph.edu.usc.jaidar.R;
 
 public class FAQAdapter extends ArrayAdapter<FAQItem> {
 

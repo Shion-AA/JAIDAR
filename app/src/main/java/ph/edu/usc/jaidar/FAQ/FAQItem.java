@@ -1,4 +1,4 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.FAQ;
 
 public class FAQItem {
     private String question;

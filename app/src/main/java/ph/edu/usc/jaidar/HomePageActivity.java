@@ -9,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,16 +19,20 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ph.edu.usc.jaidar.messaging.UserListActivity;
+import ph.edu.usc.jaidar.profile.UserProfileActivity;
+import ph.edu.usc.jaidar.worker.WorkerJob;
+import ph.edu.usc.jaidar.worker.WorkerJobAdapter;
 
 public class HomePageActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     Button logoutBtn;
-    Button TEMPEDITOR, TEMPVIEW, worker;
+    Button TEMPEDITOR, worker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +45,10 @@ public class HomePageActivity extends AppCompatActivity {
 
 
         Spinner categorySpinner = findViewById(R.id.categorySpinner);
+        Spinner workerSpinner = findViewById(R.id.workerCategorySpinner);
 
         String[] categories = { //later on get from db firestore
-                "Choose","Electrician", "Plumber", "Carpenter", "Welding",
-                "Roofer", "Mechanic", "Caretaker", "Ironworker","Electrician", "Plumber", "Carpenter", "Welding",
-                "Roofer", "Mechanic", "Caretaker","Electrician", "Plumber", "Carpenter", "Welding",
-                "Roofer", "Mechanic", "Caretaker","Electrician", "Plumber", "Carpenter", "Welding",
-                "Roofer", "Mechanic", "Caretaker"
+                "Choose","Electrician", "Plumber", "Carpenter", "Welding", "Roofer", "Mechanic", "Caretaker", "Ironworker"
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -58,6 +58,7 @@ public class HomePageActivity extends AppCompatActivity {
         );
 
         categorySpinner.setAdapter(adapter);
+        workerSpinner.setAdapter(adapter);
 
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -70,20 +71,6 @@ public class HomePageActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-//        String uid = mAuth.getCurrentUser().getUid();
-//        TextView nameTextView = findViewById(R.id.name);
-//        db.collection("users").document(uid).get()
-//                .addOnSuccessListener(documentSnapshot -> {
-//                    if (documentSnapshot.exists()) {
-//                        String name = documentSnapshot.getString("name");
-//                        nameTextView.setText(name != null ? name : "User");
-//                    } else {
-//                        nameTextView.setText("User");
-//                    }
-//                })
-//                .addOnFailureListener(e -> {
-//                    nameTextView.setText("User"); // fallback
-//                });
 
         // Logout Button
         logoutBtn = findViewById(R.id.logout_button);
@@ -111,16 +98,11 @@ public class HomePageActivity extends AppCompatActivity {
             intent.putExtra(RecruitmentEditorActivity.USER_ROLE, RecruitmentEditorActivity.WORKER); //WORKER or HIRER
             startActivity(intent);
         });
-//        TEMPVIEW = findViewById(R.id.TEMP_VIEW);
-//        TEMPVIEW.setOnClickListener(v -> {
-//            Intent intent = new Intent(getApplicationContext(), RecruitmentViewActivity.class);
-//            startActivity(intent);
-//        });
-        //END TEMPORARY INTENT
 
 
         Bottomnavigation(mAuth);
         Jobpostings(db);
+        loadWorkerJobs(db);
 
     }
 
@@ -133,7 +115,7 @@ public class HomePageActivity extends AppCompatActivity {
         jobRecycler.setAdapter(adapter);
 
         db.collection("job_recruitments")
-//                .orderBy("timestamp", Query.Direction.DESCENDING) // Optional
+//                .orderBy("posted_at", Query.Direction.DESCENDING) // Optional
                 .get()
                 .addOnSuccessListener(query -> {
                     for (DocumentSnapshot doc : query) {
@@ -160,6 +142,35 @@ public class HomePageActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to load job offers: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+    public void loadWorkerJobs(FirebaseFirestore db){
+        RecyclerView recycler = findViewById(R.id.workerRecyclerView);
+        recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        List<WorkerJob> jobList = new ArrayList<>();
+        WorkerJobAdapter adapter = new WorkerJobAdapter(this, jobList);
+        recycler.setAdapter(adapter);
+
+        db.collection("job_listing")
+                .whereEqualTo("status", "active")
+                .get()
+                .addOnSuccessListener(query -> {
+                    for (DocumentSnapshot doc : query) {
+                        WorkerJob job = new WorkerJob(
+                                doc.getId(),
+                                doc.getString("title"),
+                                doc.getString("description"),
+                                doc.getLong("rate").intValue(),
+                                doc.getString("tag"),
+                                doc.getString("user_post"),
+                                doc.getString("status")
+                        );
+                        jobList.add(job);
+                    }
+                    adapter.notifyDataSetChanged();
+                });
+    }
+
+
     private void Bottomnavigation(FirebaseAuth mAuth) {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.home); // ✅ Always highlight Home in homepage

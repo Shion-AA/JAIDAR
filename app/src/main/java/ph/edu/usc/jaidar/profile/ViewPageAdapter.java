@@ -1,4 +1,4 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.profile;
 
 import android.os.Bundle;
 

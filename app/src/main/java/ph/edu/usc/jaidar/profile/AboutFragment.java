@@ -1,4 +1,4 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +16,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import ph.edu.usc.jaidar.R;
 
 public class AboutFragment extends Fragment {
 

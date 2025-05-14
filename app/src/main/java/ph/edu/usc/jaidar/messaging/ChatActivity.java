@@ -1,9 +1,8 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.messaging;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,6 +25,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import ph.edu.usc.jaidar.MessageModel;
+import ph.edu.usc.jaidar.R;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -98,7 +100,6 @@ public class ChatActivity extends AppCompatActivity {
         msgData.put("receiver", receiverEmail);
         msgData.put("message", message);
         msgData.put("timestamp", System.currentTimeMillis());
-
         chatRef.add(msgData)
                 .addOnSuccessListener(documentReference -> messageEditText.setText(""))
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to send", Toast.LENGTH_SHORT).show());

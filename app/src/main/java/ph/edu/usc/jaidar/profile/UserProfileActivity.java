@@ -1,13 +1,10 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.profile;
 
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -15,10 +12,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import java.util.HashMap;
-import java.util.Map;
+
+import ph.edu.usc.jaidar.ActivitySectionActivity;
+import ph.edu.usc.jaidar.HomePageActivity;
+import ph.edu.usc.jaidar.R;
 
 public class UserProfileActivity extends AppCompatActivity {
 

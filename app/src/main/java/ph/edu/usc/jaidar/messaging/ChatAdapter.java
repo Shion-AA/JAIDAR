@@ -1,4 +1,4 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.messaging;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import ph.edu.usc.jaidar.MessageModel;
+import ph.edu.usc.jaidar.R;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

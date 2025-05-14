@@ -1,4 +1,4 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.messaging;
 
 public class ChatMessage {
     private String message, sender;

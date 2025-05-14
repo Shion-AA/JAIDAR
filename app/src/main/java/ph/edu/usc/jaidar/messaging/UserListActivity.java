@@ -1,4 +1,4 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.messaging;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+
+import ph.edu.usc.jaidar.R;
+import ph.edu.usc.jaidar.UserAdapter;
+import ph.edu.usc.jaidar.UserModel;
 
 public class UserListActivity extends AppCompatActivity implements UserAdapter.OnUserClickListener {
 

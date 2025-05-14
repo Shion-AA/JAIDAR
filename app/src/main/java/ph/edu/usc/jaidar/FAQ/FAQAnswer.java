@@ -1,8 +1,10 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.FAQ;
 
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import ph.edu.usc.jaidar.R;
 
 public class FAQAnswer extends AppCompatActivity {
 

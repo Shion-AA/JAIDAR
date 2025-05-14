@@ -1,4 +1,4 @@
-package ph.edu.usc.jaidar;
+package ph.edu.usc.jaidar.profile;
 
 public class Review {
     private String reviewerName;

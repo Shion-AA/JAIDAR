@@ -2,45 +2,72 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F9F7FF">
 
-    <!-- Name and Email -->
-    <LinearLayout
-        android:id="@+id/profileHeader"
+    <!-- Profile Header Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/profileHeaderCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/nameDisplay"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your Name"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/emailDisplay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="email@example.com"
-            android:textSize="14sp"
-            android:textColor="#666666"/>
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/dummy_user_icon"
+                android:layout_marginBottom="12dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/circle_mask"
+                android:clipToOutline="true" />
 
-    <!-- Tabs and Fragments -->
+            <TextView
+                android:id="@+id/nameDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Name"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#4B0082"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/emailDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="email@example.com"
+                android:textSize="14sp"
+                android:textColor="#888888"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Tabs -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/profileHeader"
+        android:backgroundTint="#ffffff"
+        app:tabIndicatorColor="#4B0082"
+        app:tabTextColor="#888888"
+        app:tabSelectedTextColor="#4B0082"
+        app:layout_constraintTop_toBottomOf="@id/profileHeaderCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- ViewPager Content -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="0dp"
@@ -55,6 +82,11 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="75dp"
+        android:background="#ffffff"
+        android:elevation="8dp"
+        app:itemIconTint="@color/nav_selector"
+        app:itemTextColor="@color/nav_selector"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

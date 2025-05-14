@@ -1,7 +1,6 @@
 package ph.edu.usc.jaidar;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import ph.edu.usc.jaidar.profile.UserProfileActivity;
 
 public class JobListingDetailsActivity extends AppCompatActivity {
 
