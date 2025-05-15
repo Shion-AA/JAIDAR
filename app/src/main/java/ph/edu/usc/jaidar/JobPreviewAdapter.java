@@ -33,7 +33,6 @@ public class JobPreviewAdapter extends RecyclerView.Adapter<JobPreviewAdapter.Vi
             super(itemView);
             title = itemView.findViewById(R.id.jobTitle);
             subtitle = itemView.findViewById(R.id.name);
-            icon = itemView.findViewById(R.id.jobIcon);
         }
     }
 

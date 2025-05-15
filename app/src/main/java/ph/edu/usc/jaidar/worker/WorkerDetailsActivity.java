@@ -13,6 +13,7 @@ import ph.edu.usc.jaidar.R;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,9 @@ public class WorkerDetailsActivity extends AppCompatActivity {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String userId = mAuth.getUid();
     private String posterUid, job_listing_id;
+
+    private ImageButton backBtn;
+
     private TextView titleView, descriptionView, rateView, tagView, posterNameView;
     private Button offerBtn;
 
@@ -46,6 +50,11 @@ public class WorkerDetailsActivity extends AppCompatActivity {
         tagView = findViewById(R.id.workerTag);
         posterNameView = findViewById(R.id.posterName);
         offerBtn = findViewById(R.id.offer_button);
+        backBtn = findViewById(R.id.backBtn);
+
+
+        backBtn.setOnClickListener(view -> finish());
+
 
         titleView.setText(getIntent().getStringExtra("title"));
         descriptionView.setText(getIntent().getStringExtra("description"));

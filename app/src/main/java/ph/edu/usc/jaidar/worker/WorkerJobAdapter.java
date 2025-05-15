@@ -34,7 +34,7 @@ public class WorkerJobAdapter extends RecyclerView.Adapter<WorkerJobAdapter.View
             super(view);
             title = view.findViewById(R.id.jobTitle);
             subtitle = view.findViewById(R.id.name);
-            icon = view.findViewById(R.id.jobIcon);
+//            icon = view.findViewById(R.id.jobIcon);
         }
     }
 

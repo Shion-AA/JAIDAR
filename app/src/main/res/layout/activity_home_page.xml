@@ -68,7 +68,7 @@
                     android:clipToOutline="true"
                     android:drawableStart="@drawable/looking_to_work_icon"
                     android:padding="10dp"
-                    android:text="Looking to Work"
+                    android:text="Post skills"
                     android:textColor="#ffffff" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -81,7 +81,7 @@
                     android:clipToOutline="true"
                     android:drawableEnd="@drawable/looking_to_hire_icon"
                     android:padding="10dp"
-                    android:text="Looking to Hire"
+                    android:text="post offer"
                     android:textColor="#ffffff" />
             </LinearLayout>
 
@@ -96,7 +96,7 @@
                     android:id="@+id/jobsHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Recent Opportunities"
+                    android:text="Job Offers"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="#4B0082"

@@ -16,13 +16,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageButton
-            android:id="@+id/backBtn"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/backbtn" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:padding="8dp">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@null"
+                android:src="@drawable/back_btn"
+                android:scaleType="fitCenter"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Job Offer"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#332771"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+
+
 
         <LinearLayout
             android:id="@+id/signupRow"
@@ -31,15 +54,6 @@
             android:orientation="horizontal"
             android:layout_marginTop="16dp">
 
-            <ImageButton
-                android:id="@+id/companyLogo"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginRight="10dp"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/companylogo_sample" />
-
             <TextView
                 android:id="@+id/poster"
                 android:layout_width="wrap_content"
@@ -47,7 +61,7 @@
                 android:textStyle="bold"
                 android:textSize="25sp"
                 android:text="User"
-                android:textColor="#FFAAAA"
+                android:textColor="@color/purple_500"
                 android:clickable="true"
                 android:focusable="true" />
         </LinearLayout>
@@ -82,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
-                android:text="Apply" />
+                android:text="Request Job" />
 
             <Button
                 android:id="@+id/saveBtn"

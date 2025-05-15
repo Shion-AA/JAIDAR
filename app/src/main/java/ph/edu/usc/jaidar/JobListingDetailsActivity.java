@@ -68,7 +68,6 @@ public class JobListingDetailsActivity extends AppCompatActivity {
 
     public void initialization(){
         backBtn = findViewById(R.id.backBtn);
-        companyLogo = findViewById(R.id.companyLogo);
         poster = findViewById(R.id.poster);
         jobTitle = findViewById(R.id.jobTitle);
         subtitle = findViewById(R.id.subtitle);
