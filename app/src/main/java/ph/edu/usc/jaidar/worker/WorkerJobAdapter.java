@@ -53,6 +53,7 @@ public class WorkerJobAdapter extends RecyclerView.Adapter<WorkerJobAdapter.View
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, WorkerDetailsActivity.class);
+            intent.putExtra("job_listing_id", job.getId());
             intent.putExtra("title", job.getTitle());
             intent.putExtra("description", job.getDescription());
             intent.putExtra("rate", job.getRate());

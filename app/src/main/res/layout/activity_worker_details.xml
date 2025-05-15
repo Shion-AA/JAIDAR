@@ -31,4 +31,10 @@
         android:text="Description"
         android:layout_marginTop="12dp" />
 
+    <Button android:id="@+id/offer_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="Send Offer!" />
+
 </LinearLayout>
