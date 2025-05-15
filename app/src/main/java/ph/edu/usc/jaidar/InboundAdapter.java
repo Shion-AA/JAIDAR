@@ -34,7 +34,7 @@ public class InboundAdapter extends RecyclerView.Adapter<InboundAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView hirer_name, offer_title, current_status;
+        TextView hirer_name, offer_title, current_status, tag, rate;
         Button accept_button, reject_button;
         View applicant_click;
 
@@ -46,6 +46,8 @@ public class InboundAdapter extends RecyclerView.Adapter<InboundAdapter.ViewHold
             accept_button = itemView.findViewById(R.id.accept_button);
             reject_button = itemView.findViewById(R.id.reject_button);
             applicant_click = itemView.findViewById(R.id.applicant_click);
+            tag = itemView.findViewById(R.id.tag);
+            rate = itemView.findViewById(R.id.rate);
         }
     }
 
@@ -71,6 +73,9 @@ public class InboundAdapter extends RecyclerView.Adapter<InboundAdapter.ViewHold
 
         holder.offer_title.setText(offer.getTitle() != null ? offer.getTitle() : "No Title");
 
+        holder.tag.setText(offer.getTag());
+        holder.rate.setText(offer.getRate().toString());
+
         String status = offer.getJobListingStatus();
         holder.current_status.setText(status != null ? status : "Unknown");
 
@@ -92,13 +97,13 @@ public class InboundAdapter extends RecyclerView.Adapter<InboundAdapter.ViewHold
         });
 
         holder.accept_button.setOnClickListener(v -> {
-            Toast.makeText(context, "accept pressed", Toast.LENGTH_SHORT).show();
             db.collection("job_listing_offer")
                     .document(offer.getId())
                     .update("status", "accepted")
                     .addOnSuccessListener(aVoid -> {
-                        offer.setStatus("accepted");
-                        this.fragment.myNotify();
+                        holder.accept_button.setVisibility(View.GONE);
+                        holder.reject_button.setVisibility(View.GONE);
+                        holder.current_status.setText("accepted");
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(context, "Error.", Toast.LENGTH_SHORT).show();
@@ -110,8 +115,9 @@ public class InboundAdapter extends RecyclerView.Adapter<InboundAdapter.ViewHold
                     .document(offer.getId())
                     .update("status", "rejected")
                     .addOnSuccessListener(aVoid -> {
-                        offer.setStatus("rejected");
-                        this.fragment.myNotify();
+                        holder.accept_button.setVisibility(View.GONE);
+                        holder.reject_button.setVisibility(View.GONE);
+                        holder.current_status.setText("rejected");
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(context, "Error.", Toast.LENGTH_SHORT).show();
