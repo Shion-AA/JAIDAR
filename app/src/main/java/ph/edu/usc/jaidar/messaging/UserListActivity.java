@@ -17,6 +17,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import ph.edu.usc.jaidar.ActivitySectionActivity;
 import ph.edu.usc.jaidar.HomePageActivity;
@@ -33,6 +35,7 @@ public class UserListActivity extends AppCompatActivity implements UserAdapter.O
     UserAdapter adapter;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
+    String currentUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +52,12 @@ public class UserListActivity extends AppCompatActivity implements UserAdapter.O
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        currentUserEmail = mAuth.getCurrentUser().getEmail();
 
-        loadUsers();
+        loadChatPartners();
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.activity);
+        bottomNavigationView.setSelectedItemId(R.id.message);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -60,12 +65,11 @@ public class UserListActivity extends AppCompatActivity implements UserAdapter.O
                 startActivity(new Intent(this, HomePageActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            } else if(id == R.id.activity){
+            } else if (id == R.id.activity) {
                 startActivity(new Intent(this, ActivitySectionActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
             } else if (id == R.id.message) {
-
                 return true;
             } else if (id == R.id.profile) {
                 String currentUid = mAuth.getUid();
@@ -79,30 +83,56 @@ public class UserListActivity extends AppCompatActivity implements UserAdapter.O
         });
     }
 
-    private void loadUsers() {
+    private void loadChatPartners() {
         progressBar.setVisibility(View.VISIBLE);
 
-        String currentEmail = mAuth.getCurrentUser().getEmail();
-        CollectionReference usersRef = db.collection("users");
+        Set<String> partnerEmails = new HashSet<>();
 
-        usersRef.get().addOnCompleteListener(task -> {
-            progressBar.setVisibility(View.GONE);
-            if (task.isSuccessful()) {
-                userList.clear();
-                for (QueryDocumentSnapshot doc : task.getResult()) {
-                    String name = doc.getString("name");
-                    String email = doc.getString("email");
+        db.collection("messages")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        String sender = doc.getString("senderEmail");
+                        String receiver = doc.getString("receiverEmail");
 
-                    // Avoid current user
-                    if (!email.equals(currentEmail)) {
-                        userList.add(new UserModel(name, email));
+                        if (currentUserEmail.equals(sender)) {
+                            partnerEmails.add(receiver);
+                        } else if (currentUserEmail.equals(receiver)) {
+                            partnerEmails.add(sender);
+                        }
                     }
-                }
-                adapter.notifyDataSetChanged();
-            } else {
-                Toast.makeText(UserListActivity.this, "Failed to load users.", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+                    if (partnerEmails.isEmpty()) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(this, "No chat history found.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // Now fetch user details based on these emails
+                    db.collection("users")
+                            .get()
+                            .addOnSuccessListener(usersSnapshot -> {
+                                userList.clear();
+                                for (QueryDocumentSnapshot userDoc : usersSnapshot) {
+                                    String name = userDoc.getString("name");
+                                    String email = userDoc.getString("email");
+
+                                    if (partnerEmails.contains(email) && !email.equals(currentUserEmail)) {
+                                        userList.add(new UserModel(name, email));
+                                    }
+                                }
+                                adapter.notifyDataSetChanged();
+                                progressBar.setVisibility(View.GONE);
+                            })
+                            .addOnFailureListener(e -> {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(this, "Failed to load users.", Toast.LENGTH_SHORT).show();
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(this, "Failed to load messages.", Toast.LENGTH_SHORT).show();
+                });
     }
 
     @Override

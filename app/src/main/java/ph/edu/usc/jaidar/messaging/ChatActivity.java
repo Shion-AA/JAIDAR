@@ -35,7 +35,6 @@ public class ChatActivity extends AppCompatActivity {
     EditText messageEditText;
     ImageButton sendButton;
     TextView chatHeaderTextView;
-
     ImageView backBtn;
 
     FirebaseAuth mAuth;
@@ -57,18 +56,19 @@ public class ChatActivity extends AppCompatActivity {
         messageEditText = findViewById(R.id.chatMessageEditText);
         sendButton = findViewById(R.id.chatSendButton);
         chatHeaderTextView = findViewById(R.id.chatHeaderText);
-
         backBtn = findViewById(R.id.back_button);
+
         backBtn.setOnClickListener(v -> goBack());
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        senderEmail = mAuth.getCurrentUser().getEmail();
-        receiverEmail = getIntent().getStringExtra("receiverEmail");
+        senderEmail = mAuth.getCurrentUser().getEmail().toLowerCase();
+        receiverEmail = getIntent().getStringExtra("receiverEmail").toLowerCase();
         receiverName = getIntent().getStringExtra("receiverName");
-        if(receiverEmail == null || senderEmail == null){
-            Toast.makeText(ChatActivity.this, "Error Missing Email", Toast.LENGTH_SHORT).show();
+
+        if (receiverEmail == null || senderEmail == null) {
+            Toast.makeText(ChatActivity.this, "Error: Missing email", Toast.LENGTH_SHORT).show();
             goBack();
             return;
         }
@@ -88,10 +88,9 @@ public class ChatActivity extends AppCompatActivity {
         sendButton.setOnClickListener(v -> sendMessage());
     }
 
-    private void goBack(){
-        Class previousPage = UserListActivity.class;
-        Intent intent = new Intent(this, previousPage);
-        this.startActivity(intent);
+    private void goBack() {
+        Intent intent = new Intent(this, UserListActivity.class);
+        startActivity(intent);
     }
 
     private void sendMessage() {
@@ -101,10 +100,11 @@ public class ChatActivity extends AppCompatActivity {
         CollectionReference chatRef = db.collection("messages");
 
         Map<String, Object> msgData = new HashMap<>();
-        msgData.put("sender", senderEmail);
-        msgData.put("receiver", receiverEmail);
+        msgData.put("senderEmail", senderEmail); // updated field name
+        msgData.put("receiverEmail", receiverEmail); // updated field name
         msgData.put("message", message);
         msgData.put("timestamp", System.currentTimeMillis());
+
         chatRef.add(msgData)
                 .addOnSuccessListener(documentReference -> messageEditText.setText(""))
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to send", Toast.LENGTH_SHORT).show());
@@ -123,8 +123,8 @@ public class ChatActivity extends AppCompatActivity {
 
                         messageList.clear();
                         for (QueryDocumentSnapshot doc : snapshots) {
-                            String sender = doc.getString("sender");
-                            String receiver = doc.getString("receiver");
+                            String sender = doc.getString("senderEmail");
+                            String receiver = doc.getString("receiverEmail");
                             String text = doc.getString("message");
 
                             if (
@@ -135,6 +135,7 @@ public class ChatActivity extends AppCompatActivity {
                                 messageList.add(new MessageModel(sender, receiver, text));
                             }
                         }
+
                         chatAdapter.notifyDataSetChanged();
                         chatRecyclerView.scrollToPosition(messageList.size() - 1);
                     }
