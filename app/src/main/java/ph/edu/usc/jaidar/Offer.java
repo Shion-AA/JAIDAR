@@ -105,6 +105,7 @@ public class Offer {
                 ", Hirer{" +
                     "id=" + hirer +
                     ", name=" + hirer.getName() +
+                    ", email=" + hirer.getEmail() +
                 "}" +
                 '}';
     }

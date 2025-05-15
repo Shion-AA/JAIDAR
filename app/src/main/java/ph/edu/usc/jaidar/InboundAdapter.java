@@ -14,11 +14,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
+import ph.edu.usc.jaidar.messaging.ChatActivity;
+
 public class InboundAdapter extends RecyclerView.Adapter<InboundAdapter.ViewHolder> {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private final List<Offer> offerList;
     private final Context context;
     private final OffersFragment fragment;
@@ -66,7 +71,7 @@ public class InboundAdapter extends RecyclerView.Adapter<InboundAdapter.ViewHold
 
         holder.offer_title.setText(offer.getTitle() != null ? offer.getTitle() : "No Title");
 
-        String status = offer.getStatus();
+        String status = offer.getJobListingStatus();
         holder.current_status.setText(status != null ? status : "Unknown");
 
         holder.accept_button.setVisibility(View.GONE);
@@ -80,16 +85,37 @@ public class InboundAdapter extends RecyclerView.Adapter<InboundAdapter.ViewHold
         }
 
         holder.applicant_click.setOnClickListener(v -> {
-            // TODO: handle full item click here
+            Intent intent = new Intent(this.context, ChatActivity.class);
+            intent.putExtra("receiverEmail", offer.getHirer().getEmail());
+            intent.putExtra("receiverName", offer.getHirer().getName());
+            context.startActivity(intent);
         });
 
-        // Optional: accept/reject actions
         holder.accept_button.setOnClickListener(v -> {
-            // TODO: handle accept
+            Toast.makeText(context, "accept pressed", Toast.LENGTH_SHORT).show();
+            db.collection("job_listing_offer")
+                    .document(offer.getId())
+                    .update("status", "accepted")
+                    .addOnSuccessListener(aVoid -> {
+                        offer.setStatus("accepted");
+                        this.fragment.myNotify();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(context, "Error.", Toast.LENGTH_SHORT).show();
+                    });
         });
 
         holder.reject_button.setOnClickListener(v -> {
-            // TODO: handle reject
+            db.collection("job_listing_offer")
+                    .document(offer.getId())
+                    .update("status", "rejected")
+                    .addOnSuccessListener(aVoid -> {
+                        offer.setStatus("rejected");
+                        this.fragment.myNotify();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(context, "Error.", Toast.LENGTH_SHORT).show();
+                    });
         });
     }
 

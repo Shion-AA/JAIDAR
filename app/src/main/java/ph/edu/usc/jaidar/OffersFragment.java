@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -158,16 +159,30 @@ public class OffersFragment extends Fragment {
 //                                        }
 //                                    }
 
-
+//                                    db.collection("users").whereIn("uid", hirerIds).get()
+//                                            .addOnSuccessListener(usersSnapshot -> {
+//                                                Map<String, User> userDataMap = new HashMap<>();
+//                                                for(DocumentSnapshot doc : usersSnapshot){
+//                                                    User hirer = new User();
+//                                                    hirer.setUid(doc.getId());
+//                                                    hirer.setName(doc.getString("name"));
+//                                                    hirer.setEmail(doc.getString("email"));
+//                                                    userDataMap.put(doc.getId(), hirer);
+//                                                }
+//
+//                                                for(Offer offer : offers){
+//                                                    User hirer = userDataMap.get(offer.getHirerId());
+//                                                    offer.setHirer(hirer);
+//                                                }
+//                                                inBoundOffers.clear();
+//                                                inBoundOffers.addAll(offers);
+//                                                inboundAdapter.notifyDataSetChanged();
+//                                            });
 
                                     db.collection("users")
-                                            .whereIn(FieldPath.documentId(), hirerIds)
+                                            .whereIn(FieldPath.documentId(), new ArrayList<>(new HashSet<>(hirerIds)))
                                             .get()
-                                            .addOnCompleteListener(task -> {
-                                                Log.d("OFFERS", "User query completed. Successful: " + task.isSuccessful());
-                                            })
                                             .addOnSuccessListener(snapshot -> {
-                                                Log.d("OFFERS", "\n\nUser snapshot count: " + snapshot.size());
                                                 Map<String, User> userDataMap = new HashMap<>();
                                                 for(DocumentSnapshot doc : snapshot){
                                                     User hirer = new User();
@@ -177,12 +192,16 @@ public class OffersFragment extends Fragment {
                                                     userDataMap.put(doc.getId(), hirer);
                                                 }
 
-
+                                                Log.d("OFFERS", "\n\ncorrect key:  " + hirerIds);
                                                 for(Offer offer : offers){
                                                     Log.d("OFFERS", "\n\noffer.getHiredId: " + offer.getHirerId());
+                                                    Log.d("OFFERS", "\n\nuserDataMap.get(offer.getHirerId(): " + userDataMap.get(offer.getHirerId()));
                                                     User hirer = userDataMap.get(offer.getHirerId());
                                                     offer.setHirer(hirer);
                                                 }
+                                                inBoundOffers.clear();
+                                                inBoundOffers.addAll(offers);
+                                                inboundAdapter.notifyDataSetChanged();
                                             })
                                             .addOnFailureListener(e -> {
                                                 Log.e("OFFERS", "Error fetching users", e);
@@ -190,8 +209,6 @@ public class OffersFragment extends Fragment {
                                             });
 
                                             Log.d("OFFERS", "\noffers count : " +offers.size() + " | offers: " + offers);
-                                            inBoundOffers.clear();
-                                            inBoundOffers.addAll(offers);
                                             if(offers.isEmpty()){
                                                 inboundList.setVisibility(View.GONE);
                                                 inboundEmpty.setVisibility(View.VISIBLE);
@@ -199,7 +216,6 @@ public class OffersFragment extends Fragment {
                                                 inboundEmpty.setVisibility(View.GONE);
                                                 inboundList.setVisibility(View.VISIBLE);
                                             }
-                                            inboundAdapter.notifyDataSetChanged();
                                 });
                     } else {
                         //no inbound
@@ -244,6 +260,10 @@ public class OffersFragment extends Fragment {
                         Log.e("OFFERS", "Failed to fetch chunk", e);
                     });
         }
+    }
+
+    public void myNotify(){
+        inboundAdapter.notifyDataSetChanged();
     }
 
 }
